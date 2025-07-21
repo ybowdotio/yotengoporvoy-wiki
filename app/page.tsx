@@ -3,21 +3,21 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
-type Letter = {
-  id: string;
-  title: string;
-  date?: string;
-  created_at?: string;
-};
-
 export default function HomePage() {
+  type Letter = {
+    id: string;
+    title: string;
+    date?: string;
+    created_at?: string;
+  };
+
   const [letters, setLetters] = useState<Letter[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchLetters() {
       const { data, error } = await supabase
-        .from<Letter>('letters')
+        .from('letters') // ✅ fixed: removed incorrect generic
         .select('*');
 
       if (error) {
@@ -31,7 +31,7 @@ export default function HomePage() {
   }, []);
 
   function formatDate(dateString?: string) {
-    if (!dateString) return '';
+    if (!dateString) return 'Unknown date';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
