@@ -3,24 +3,35 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
+type Letter = {
+  id: string;
+  title: string;
+  date?: string;
+  created_at?: string;
+};
+
 export default function HomePage() {
-  const [letters, setLetters] = useState<any[]>([]);
+  const [letters, setLetters] = useState<Letter[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchLetters() {
-      const { data, error } = await supabase.from('letters').select('*');
+      const { data, error } = await supabase
+        .from<Letter>('letters')
+        .select('*');
+
       if (error) {
         setError(error.message);
       } else {
-        setLetters(data);
+        setLetters(data || []);
       }
     }
 
     fetchLetters();
   }, []);
 
-  function formatDate(dateString: string) {
+  function formatDate(dateString?: string) {
+    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
