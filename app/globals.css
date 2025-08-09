@@ -194,6 +194,9 @@ main {
     transition: all 0.3s ease;
     cursor: pointer;
     overflow: hidden;
+    display: block;
+    text-decoration: none;
+    color: inherit;
 }
 
 .collection-card::before {
