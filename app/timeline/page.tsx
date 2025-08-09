@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 type TimelineItem = {
   id: string;
@@ -51,25 +53,11 @@ export default function TimelinePage() {
 
   return (
     <>
-      <div className="airmail-banner"></div>
-      
-      <header>
-        <div className="header-content">
-          <h1>Family Timeline</h1>
-          <p className="tagline">Journey Through the Years</p>
-        </div>
-      </header>
-
-      <nav>
-        <ul>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/browse">Browse</Link></li>
-          <li><Link href="/timeline" className="active">Timeline</Link></li>
-          <li><Link href="/upload">Contribute</Link></li>
-        </ul>
-      </nav>
+      <Header />
 
       <main className="timeline-container">
+        <h1 style={{textAlign: 'center', marginBottom: '2rem'}}>Family Timeline</h1>
+        
         {loading ? (
           <div className="loading">Loading timeline...</div>
         ) : (
@@ -128,6 +116,8 @@ export default function TimelinePage() {
           </>
         )}
       </main>
+
+      <Footer />
 
       <style jsx>{`
         .timeline-container {
@@ -271,11 +261,6 @@ export default function TimelinePage() {
           text-align: center;
           padding: 3rem;
           color: #666;
-        }
-
-        nav a.active {
-          background: rgba(244, 241, 232, 0.2);
-          font-weight: bold;
         }
       `}</style>
     </>
