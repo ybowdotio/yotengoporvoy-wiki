@@ -127,7 +127,7 @@ export default function RecordPage() {
       const { error: dbError } = await supabase
         .from('content_items')
         .insert({
-          content_type: 'audio_recording', // Using the correct enum value
+          type: 'audio_recording', // Using 'type' field with 'audio_recording' value
           title: formData.title || 'Audio Recording',
           description: formData.description,
           content_date: formData.content_date || null,
