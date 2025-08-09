@@ -30,18 +30,30 @@ export default function UploadPage() {
       // Upload file if present
       if (file) {
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `${formData.type}/${fileName}`;
+        const fileName = `${Date.now()}-${file.name}`;
+        
+        // Determine which bucket to use based on file type
+        let bucketName = 'documents'; // default
+        let filePath = fileName;
+        
+        // Map content types to appropriate buckets
+        if (formData.type === 'photo' || ['jpg', 'jpeg', 'png', 'gif'].includes(fileExt?.toLowerCase() || '')) {
+          bucketName = 'photos';
+        } else if (formData.type === 'recording' || ['mp3', 'wav', 'ogg', 'm4a'].includes(fileExt?.toLowerCase() || '')) {
+          bucketName = 'audio';
+        } else if (['mp4', 'mov', 'avi'].includes(fileExt?.toLowerCase() || '')) {
+          bucketName = 'video';
+        }
 
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('uploads')
+          .from(bucketName)
           .upload(filePath, file);
 
         if (uploadError) throw uploadError;
         
         // Get public URL
         const { data: { publicUrl } } = supabase.storage
-          .from('uploads')
+          .from(bucketName)
           .getPublicUrl(filePath);
           
         fileUrl = publicUrl;
