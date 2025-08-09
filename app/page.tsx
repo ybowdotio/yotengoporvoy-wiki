@@ -40,32 +40,32 @@ export default function HomePage() {
   async function fetchContent() {
     try {
       // Fetch counts by type
-      const { data: letterCount } = await supabase
+      const { count: letterCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('type', 'letter');
 
-      const { data: photoCount } = await supabase
+      const { count: photoCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('type', 'photo');
 
-      const { data: diaryCount } = await supabase
+      const { count: diaryCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('type', 'diary');
 
-      const { data: recordingCount } = await supabase
+      const { count: recordingCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('type', 'recording');
 
-      const { data: newsCount } = await supabase
+      const { count: newsCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('type', 'news_clipping');
 
-      const { data: anecdoteCount } = await supabase
+      const { count: anecdoteCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
         .eq('type', 'anecdote');
@@ -78,12 +78,12 @@ export default function HomePage() {
         .limit(6);
 
       setStats({
-        letters: letterCount?.count || 0,
-        photos: photoCount?.count || 0,
-        diaries: diaryCount?.count || 0,
-        recordings: recordingCount?.count || 0,
-        news: newsCount?.count || 0,
-        anecdotes: anecdoteCount?.count || 0
+        letters: letterCount || 0,
+        photos: photoCount || 0,
+        diaries: diaryCount || 0,
+        recordings: recordingCount || 0,
+        news: newsCount || 0,
+        anecdotes: anecdoteCount || 0
       });
 
       setRecentItems(recent || []);
