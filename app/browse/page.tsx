@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
@@ -16,7 +16,7 @@ type ContentItem = {
   created_at: string;
 };
 
-export default function BrowsePage() {
+function BrowseContent() {
   const searchParams = useSearchParams();
   const type = searchParams.get('type') || 'all';
   
@@ -62,15 +62,6 @@ export default function BrowsePage() {
 
   return (
     <>
-      <div className="airmail-banner"></div>
-      
-      <header>
-        <div className="header-content">
-          <h1>Archive Browser</h1>
-          <p className="tagline">Explore the Ulrich Family Collection</p>
-        </div>
-      </header>
-
       <nav>
         <ul>
           <li><Link href="/">Home</Link></li>
@@ -271,6 +262,29 @@ export default function BrowsePage() {
           font-weight: bold;
         }
       `}</style>
+    </>
+  );
+}
+
+export default function BrowsePage() {
+  return (
+    <>
+      <div className="airmail-banner"></div>
+      
+      <header>
+        <div className="header-content">
+          <h1>Archive Browser</h1>
+          <p className="tagline">Explore the Ulrich Family Collection</p>
+        </div>
+      </header>
+
+      <Suspense fallback={
+        <div style={{ padding: '2rem', textAlign: 'center' }}>
+          Loading archive...
+        </div>
+      }>
+        <BrowseContent />
+      </Suspense>
     </>
   );
 }
