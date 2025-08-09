@@ -838,3 +838,379 @@ fieldset legend {
   color: #8B7355;
   font-size: 1.1rem;
 }
+
+/* Add these styles to your existing globals.css file */
+
+/* Phone Ribbon in Header */
+.phone-ribbon {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: linear-gradient(135deg, #fff 0%, #fffdf0 100%);
+  border: 2px solid #8B7355;
+  border-top: none;
+  padding: 0.75rem 1.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: perspective(20px) rotateX(-2deg);
+  z-index: 10;
+}
+
+.phone-ribbon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: repeating-linear-gradient(
+    45deg,
+    #d32f2f,
+    #d32f2f 10px,
+    #1976d2 10px,
+    #1976d2 20px,
+    #fff 20px,
+    #fff 30px
+  );
+}
+
+.phone-icon {
+  font-size: 1.2rem;
+  animation: ring 2s ease-in-out infinite;
+}
+
+@keyframes ring {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(-10deg); }
+  20%, 40% { transform: rotate(10deg); }
+}
+
+.phone-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+.phone-number-header {
+  font-family: 'Courier New', monospace;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #B22222;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.phone-number-header:hover {
+  color: #8B0000;
+  transform: scale(1.05);
+}
+
+.phone-subtitle {
+  font-size: 0.75rem;
+  color: #888;
+  font-family: 'Courier New', monospace;
+  border-left: 1px solid #ccc;
+  padding-left: 0.5rem;
+  margin-left: 0.25rem;
+}
+
+/* Enhanced Footer */
+footer {
+  background: linear-gradient(180deg, #3a3226 0%, #2c2416 100%);
+  color: #f4f1e8;
+  margin-top: 4rem;
+  border-top: 12px solid;
+  border-image: repeating-linear-gradient(
+    45deg,
+    #d32f2f,
+    #d32f2f 10px,
+    #1976d2 10px,
+    #1976d2 20px,
+    #fff 20px,
+    #fff 30px
+  ) 12;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+/* Footer Call to Action */
+.footer-contribute {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 253, 240, 0.1);
+  border-radius: 8px;
+  margin-bottom: 3rem;
+  border: 2px dashed rgba(244, 241, 232, 0.3);
+}
+
+.footer-contribute h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  font-family: 'Courier New', monospace;
+  color: #f4f1e8;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.footer-contribute p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Phone CTA in Footer */
+.phone-cta-footer {
+  background: #FFFDF0;
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 1.5rem auto;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-cta-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    #d32f2f,
+    #d32f2f 10px,
+    #1976d2 10px,
+    #1976d2 20px
+  );
+}
+
+.phone-methods {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.method {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.method-icon {
+  font-size: 1.5rem;
+}
+
+.phone-number-footer {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #B22222;
+  text-decoration: none;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.phone-number-footer:hover {
+  color: #8B0000;
+  transform: scale(1.05);
+}
+
+.phone-number-footer::after {
+  content: '→';
+  position: absolute;
+  right: -30px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.phone-number-footer:hover::after {
+  right: -25px;
+  opacity: 1;
+}
+
+.phone-prefix {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.phone-main {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.phone-instruction {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 1rem;
+  font-family: 'Courier New', monospace;
+}
+
+/* Footer Info Sections */
+.footer-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+  padding-top: 2rem;
+  border-top: 1px dashed rgba(244, 241, 232, 0.3);
+}
+
+.footer-section h4 {
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #f4f1e8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-section p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+  color: #f4f1e8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.85;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.footer-stats {
+  list-style: none;
+  padding: 0;
+  font-family: 'Courier New', monospace;
+}
+
+.footer-stats li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.footer-stats span {
+  font-weight: bold;
+  color: #ffd700;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(244, 241, 232, 0.2);
+}
+
+.footer-bottom p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.footer-dedication {
+  font-style: italic;
+  margin-top: 0.5rem;
+  font-size: 0.85rem !important;
+  opacity: 0.7 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .phone-ribbon {
+    position: static;
+    margin: 1rem auto;
+    width: fit-content;
+    transform: none;
+  }
+  
+  .phone-methods {
+    gap: 1rem;
+  }
+  
+  .phone-number-footer {
+    font-size: 2rem;
+  }
+  
+  .phone-main {
+    font-size: 2rem;
+  }
+  
+  .phone-prefix {
+    font-size: 1.6rem;
+  }
+  
+  .footer-info {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  header {
+    padding-top: 3rem;
+  }
+}
+
+/* Special styling for Amish-friendly mobile view */
+@media (max-width: 480px) {
+  .phone-cta-footer {
+    padding: 1.5rem 1rem;
+  }
+  
+  .phone-methods {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .method {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  
+  .phone-number-footer {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .phone-main,
+  .phone-prefix {
+    font-size: 1.5rem;
+  }
+}
