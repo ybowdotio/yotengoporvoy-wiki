@@ -46,7 +46,7 @@ export default function RecordPage() {
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         setAudioBlob(audioBlob);
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
@@ -88,7 +88,7 @@ export default function RecordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!audioBlob && !audioUrl) {
+    if (!audioBlob) {
       setMessage('❌ Please record audio first');
       return;
     }
@@ -98,12 +98,25 @@ export default function RecordPage() {
 
     try {
       // Upload audio file
-      const fileName = `recording-${Date.now()}.wav`;
-      const { error: uploadError } = await supabase.storage
+      const fileName = `recording-${Date.now()}.webm`;
+      
+      // First check if bucket exists and is accessible
+      const { data: buckets } = await supabase.storage.listBuckets();
+      console.log('Available buckets:', buckets);
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('audio')
-        .upload(fileName, audioBlob!);
+        .upload(fileName, audioBlob, {
+          contentType: 'audio/webm',
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(uploadError.message || 'Failed to upload audio');
+      }
+
+      console.log('Upload successful:', uploadData);
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
@@ -149,7 +162,18 @@ export default function RecordPage() {
       });
 
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      console.error('Full error:', error);
+      let errorMessage = 'An unknown error occurred';
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        
+        // Check for specific storage errors
+        if (errorMessage.includes('400') || errorMessage.includes('not found')) {
+          errorMessage = 'Storage bucket "audio" may not be configured. Please check Supabase storage settings.';
+        }
+      }
+      
       setMessage('❌ Error: ' + errorMessage);
     } finally {
       setUploading(false);
