@@ -14,7 +14,11 @@ type ContentItem = {
   content_date: string;
   contributor_name: string;
   created_at: string;
-  source_details?: any;
+  source_details?: {
+    audio_url?: string;
+    original_file_url?: string;
+    [key: string]: unknown;
+  };
 };
 
 function BrowseContent() {
@@ -180,6 +184,7 @@ function BrowseContent() {
               {selectedItem.type === 'photo' && selectedItem.source_details?.original_file_url && (
                 <div className="modal-section">
                   <h4>Photo</h4>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img 
                     src={selectedItem.source_details.original_file_url} 
                     alt={selectedItem.title || 'Photo'} 
