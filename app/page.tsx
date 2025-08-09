@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '../lib/supabase';
 
 type ContentStats = {
@@ -120,12 +121,12 @@ export default function HomePage() {
       {/* Navigation */}
       <nav>
         <ul>
-          <li><a href="/browse?type=anecdote">Stories</a></li>
-          <li><a href="/browse?type=photo">Photos</a></li>
-          <li><a href="/browse?type=letter">Letters</a></li>
-          <li><a href="/timeline">Timeline</a></li>
-          <li><a href="/browse?type=recording">Interviews</a></li>
-          <li><a href="/upload">Contribute</a></li>
+          <li><Link href="/browse?type=anecdote">Stories</Link></li>
+          <li><Link href="/browse?type=photo">Photos</Link></li>
+          <li><Link href="/browse?type=letter">Letters</Link></li>
+          <li><Link href="/timeline">Timeline</Link></li>
+          <li><Link href="/browse?type=recording">Interviews</Link></li>
+          <li><Link href="/upload">Contribute</Link></li>
         </ul>
       </nav>
 
@@ -140,41 +141,41 @@ export default function HomePage() {
 
         {/* Collections Grid with Real Data */}
         <section className="collections">
-          <div className="collection-card" onClick={() => window.location.href='/browse?type=diary'}>
+          <Link href="/browse?type=diary" className="collection-card">
             <h3>📚 Diaries & Journals</h3>
             <p>Personal accounts from the journey and early days in Costa Rica</p>
             <span className="collection-count">{loading ? '...' : `${stats.diaries} entries`}</span>
-          </div>
+          </Link>
           
-          <div className="collection-card" onClick={() => window.location.href='/browse?type=letter'}>
+          <Link href="/browse?type=letter" className="collection-card">
             <h3>✉️ Letters Home</h3>
             <p>Correspondence between Costa Rica and Illinois</p>
             <span className="collection-count">{loading ? '...' : `${stats.letters} letters`}</span>
-          </div>
+          </Link>
           
-          <div className="collection-card" onClick={() => window.location.href='/browse?type=photo'}>
+          <Link href="/browse?type=photo" className="collection-card">
             <h3>📸 Photography</h3>
             <p>Visual memories from 1968 to present</p>
             <span className="collection-count">{loading ? '...' : `${stats.photos} photos`}</span>
-          </div>
+          </Link>
           
-          <div className="collection-card" onClick={() => window.location.href='/browse?type=recording'}>
+          <Link href="/browse?type=recording" className="collection-card">
             <h3>🎙️ Oral Histories</h3>
             <p>Recorded interviews and stories</p>
             <span className="collection-count">{loading ? '...' : `${stats.recordings} recordings`}</span>
-          </div>
+          </Link>
           
-          <div className="collection-card" onClick={() => window.location.href='/browse?type=news_clipping'}>
+          <Link href="/browse?type=news_clipping" className="collection-card">
             <h3>📰 News Clippings</h3>
             <p>Press coverage and community newsletters</p>
             <span className="collection-count">{loading ? '...' : `${stats.news} articles`}</span>
-          </div>
+          </Link>
           
-          <div className="collection-card" onClick={() => window.location.href='/browse?type=anecdote'}>
+          <Link href="/browse?type=anecdote" className="collection-card">
             <h3>💭 Anecdotes</h3>
             <p>Short memories and moments</p>
             <span className="collection-count">{loading ? '...' : `${stats.anecdotes} stories`}</span>
-          </div>
+          </Link>
         </section>
 
         {/* Contribute Section */}
@@ -188,15 +189,15 @@ export default function HomePage() {
           <p style={{color: '#666', fontSize: '0.9rem'}}>Leave a voice message with your story anytime</p>
           
           <div className="contribute-options">
-            <a href="/upload" className="contribute-btn">
+            <Link href="/upload" className="contribute-btn">
               📷 Upload Photos
-            </a>
-            <a href="/write" className="contribute-btn">
+            </Link>
+            <Link href="/write" className="contribute-btn">
               ✍️ Write a Memory
-            </a>
-            <a href="/record" className="contribute-btn">
+            </Link>
+            <Link href="/record" className="contribute-btn">
               🎤 Record Audio
-            </a>
+            </Link>
           </div>
         </section>
 
