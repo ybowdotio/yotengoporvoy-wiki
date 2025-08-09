@@ -13,7 +13,7 @@ export default function RecordPage() {
   const [message, setMessage] = useState('');
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
+  const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [formData, setFormData] = useState({
@@ -31,36 +31,55 @@ export default function RecordPage() {
       if (audioUrl) {
         URL.revokeObjectURL(audioUrl);
       }
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     };
   }, [audioUrl]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    if (type === 'checkbox') {
+      setFormData(prev => ({
+        ...prev,
+        [name]: (e.target as HTMLInputElement).checked
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
 
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
+      chunksRef.current = [];
 
       mediaRecorder.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data);
+        }
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        setAudioBlob(audioBlob);
-        const url = URL.createObjectURL(audioBlob);
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        setAudioBlob(blob);
+        const url = URL.createObjectURL(blob);
         setAudioUrl(url);
       };
 
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-
-      // Start timer
+      
       timerRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
-
+      
     } catch (error) {
       console.error('Error accessing microphone:', error);
       setMessage('❌ Unable to access microphone. Please check your permissions.');
@@ -100,14 +119,18 @@ export default function RecordPage() {
       // Upload audio file
       const fileName = `recording-${Date.now()}.webm`;
       
-      // First check if bucket exists and is accessible
-      const { data: buckets } = await supabase.storage.listBuckets();
-      console.log('Available buckets:', buckets);
+      // Debug: Check blob details
+      console.log('Blob details:', {
+        type: audioBlob.type,
+        size: audioBlob.size,
+        sizeInMB: (audioBlob.size / 1024 / 1024).toFixed(2)
+      });
       
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('audio')
         .upload(fileName, audioBlob, {
-          contentType: 'audio/webm',
+          contentType: audioBlob.type || 'audio/webm',
+          cacheControl: '3600',
           upsert: false
         });
 
@@ -123,7 +146,7 @@ export default function RecordPage() {
         .from('audio')
         .getPublicUrl(fileName);
 
-// Save to database
+      // Save to database
       const { error: dbError } = await supabase
         .from('content_items')
         .insert({
@@ -135,6 +158,8 @@ export default function RecordPage() {
           contributor_name: formData.contributor_name,
           contributor_email: formData.contributor_email,
           contributor_phone: formData.contributor_phone,
+          is_public: true,
+          is_sensitive: false,
           source: 'web_upload',
           source_details: {
             audio_url: publicUrl,
@@ -215,391 +240,142 @@ export default function RecordPage() {
           </ul>
         </div>
 
-        <div className="recorder-section">
-          <div className="recorder-controls">
-            {!isRecording && !audioUrl && (
-              <button onClick={startRecording} className="record-btn">
-                🔴 Start Recording
+        <div className="recording-interface">
+          {!isRecording && !audioUrl && (
+            <button onClick={startRecording} className="record-button">
+              🔴 Start Recording
+            </button>
+          )}
+
+          {isRecording && (
+            <div className="recording-active">
+              <div className="recording-indicator">
+                <span className="pulse"></span>
+                Recording... {formatTime(recordingTime)}
+              </div>
+              <button onClick={stopRecording} className="stop-button">
+                ⏹️ Stop Recording
               </button>
-            )}
-            
-            {isRecording && (
-              <>
-                <div className="recording-indicator">
-                  <span className="recording-dot"></span>
-                  Recording... {formatTime(recordingTime)}
-                </div>
-                <button onClick={stopRecording} className="stop-btn">
-                  ⏹️ Stop Recording
+            </div>
+          )}
+
+          {audioUrl && !isRecording && (
+            <div className="playback-section">
+              <h3>Review Your Recording</h3>
+              <audio controls src={audioUrl} />
+              <div className="recording-actions">
+                <button onClick={startRecording} className="rerecord-button">
+                  🔄 Record Again
                 </button>
-              </>
-            )}
-
-            {audioUrl && !isRecording && (
-              <div className="playback-section">
-                <audio controls src={audioUrl} />
-                <div className="playback-controls">
-                  <button onClick={() => {
-                    setAudioUrl(null);
-                    setAudioBlob(null);
-                    setRecordingTime(0);
-                  }} className="rerecord-btn">
-                    🔄 Record Again
-                  </button>
-                </div>
               </div>
-            )}
-          </div>
-
-          {audioUrl && (
-            <form onSubmit={handleSubmit} className="recording-form">
-              <h3>Add Details to Your Recording</h3>
-              
-              <div className="form-group">
-                <label>Title for your recording</label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  placeholder="e.g., My memories of the journey to Costa Rica"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Brief description</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  placeholder="What is this recording about?"
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>When is this story from?</label>
-                  <input
-                    type="date"
-                    value={formData.content_date}
-                    onChange={(e) => setFormData({...formData, content_date: e.target.value})}
-                  />
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={formData.date_is_approximate}
-                      onChange={(e) => setFormData({...formData, date_is_approximate: e.target.checked})}
-                    />
-                    Date is approximate
-                  </label>
-                </div>
-              </div>
-
-              <div className="contributor-section">
-                <h4>Your Information (Optional)</h4>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Your Name</label>
-                    <input
-                      type="text"
-                      value={formData.contributor_name}
-                      onChange={(e) => setFormData({...formData, contributor_name: e.target.value})}
-                      placeholder="Your name"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Your Email</label>
-                    <input
-                      type="email"
-                      value={formData.contributor_email}
-                      onChange={(e) => setFormData({...formData, contributor_email: e.target.value})}
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <button type="submit" className="submit-btn" disabled={uploading}>
-                {uploading ? 'Uploading...' : '📤 Upload Recording'}
-              </button>
-            </form>
+            </div>
           )}
         </div>
 
+        {audioUrl && (
+          <form onSubmit={handleSubmit} className="record-form">
+            <h3>Add Details About Your Recording</h3>
+            
+            <div className="form-group">
+              <label htmlFor="title">Title</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                placeholder="e.g., Memories of the journey to Costa Rica"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                rows={4}
+                placeholder="What is this recording about?"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="content_date">Date (when did this happen?)</label>
+              <input
+                type="date"
+                id="content_date"
+                name="content_date"
+                value={formData.content_date}
+                onChange={handleInputChange}
+              />
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="date_is_approximate"
+                  checked={formData.date_is_approximate}
+                  onChange={handleInputChange}
+                />
+                This date is approximate
+              </label>
+            </div>
+
+            <fieldset>
+              <legend>Your Information (Optional)</legend>
+              
+              <div className="form-group">
+                <label htmlFor="contributor_name">Your name</label>
+                <input
+                  type="text"
+                  id="contributor_name"
+                  name="contributor_name"
+                  value={formData.contributor_name}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="contributor_email">Your email</label>
+                <input
+                  type="email"
+                  id="contributor_email"
+                  name="contributor_email"
+                  value={formData.contributor_email}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="contributor_phone">Your phone</label>
+                <input
+                  type="tel"
+                  id="contributor_phone"
+                  name="contributor_phone"
+                  value={formData.contributor_phone}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </fieldset>
+
+            <button type="submit" disabled={uploading} className="submit-button">
+              {uploading ? 'Uploading...' : 'Save Recording'}
+            </button>
+          </form>
+        )}
+
         {message && (
-          <div className={`message ${message.includes('✅') ? 'success' : 'error'}`}>
+          <div className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
             {message}
           </div>
         )}
 
-        <div className="alternative-section">
+        <div className="phone-cta">
           <h3>Or Call Our Story Line</h3>
-          <div className="phone-number">📞 1-800-MEMORIA</div>
+          <p className="phone-number">📞 1-800-MEMORIA</p>
           <p>Call anytime to leave your story as a voice message</p>
         </div>
       </main>
-
-      <style jsx>{`
-        .record-container {
-          max-width: 800px;
-          margin: 2rem auto;
-          padding: 0 1rem;
-        }
-
-        .recording-tips {
-          background: #fff;
-          border: 2px solid #3a3226;
-          border-radius: 8px;
-          padding: 1.5rem;
-          margin-bottom: 2rem;
-        }
-
-        .recording-tips h3 {
-          margin-bottom: 1rem;
-          color: #3a3226;
-        }
-
-        .recording-tips ul {
-          list-style: none;
-          padding-left: 1rem;
-        }
-
-        .recording-tips li {
-          margin-bottom: 0.5rem;
-          color: #666;
-        }
-
-        .recording-tips li::before {
-          content: "• ";
-          color: #3a3226;
-          font-weight: bold;
-        }
-
-        .recorder-section {
-          background: white;
-          border: 2px solid #3a3226;
-          border-radius: 8px;
-          padding: 2rem;
-          margin-bottom: 2rem;
-        }
-
-        .recorder-controls {
-          text-align: center;
-          padding: 2rem 0;
-        }
-
-        .record-btn, .stop-btn, .rerecord-btn {
-          padding: 1rem 2rem;
-          font-size: 1.2rem;
-          border: none;
-          border-radius: 50px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .record-btn {
-          background: #d32f2f;
-          color: white;
-        }
-
-        .record-btn:hover {
-          background: #b71c1c;
-          transform: scale(1.05);
-        }
-
-        .stop-btn {
-          background: #666;
-          color: white;
-        }
-
-        .stop-btn:hover {
-          background: #444;
-        }
-
-        .rerecord-btn {
-          background: #f4f1e8;
-          color: #3a3226;
-          border: 2px solid #3a3226;
-          margin-top: 1rem;
-        }
-
-        .rerecord-btn:hover {
-          background: #3a3226;
-          color: #f4f1e8;
-        }
-
-        .recording-indicator {
-          font-size: 1.5rem;
-          margin-bottom: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-        }
-
-        .recording-dot {
-          width: 12px;
-          height: 12px;
-          background: #d32f2f;
-          border-radius: 50%;
-          animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-
-        .playback-section {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1rem;
-        }
-
-        .playback-section audio {
-          width: 100%;
-          max-width: 400px;
-        }
-
-        .recording-form {
-          margin-top: 2rem;
-          padding-top: 2rem;
-          border-top: 2px dashed #ddd;
-        }
-
-        .recording-form h3 {
-          margin-bottom: 1.5rem;
-          color: #3a3226;
-        }
-
-        .form-group {
-          margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-          display: block;
-          margin-bottom: 0.5rem;
-          font-weight: bold;
-          color: #3a3226;
-        }
-
-        .form-group input,
-        .form-group textarea {
-          width: 100%;
-          padding: 0.75rem;
-          border: 2px solid #ddd;
-          border-radius: 4px;
-          font-family: 'Courier New', monospace;
-        }
-
-        .form-row {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 1rem;
-        }
-
-        .checkbox-label {
-          display: flex;
-          align-items: center;
-          margin-top: 0.5rem;
-          font-weight: normal;
-        }
-
-        .checkbox-label input {
-          width: auto;
-          margin-right: 0.5rem;
-        }
-
-        .contributor-section {
-          border-top: 2px dashed #ddd;
-          margin-top: 1.5rem;
-          padding-top: 1.5rem;
-        }
-
-        .contributor-section h4 {
-          margin-bottom: 1rem;
-          color: #666;
-        }
-
-        .submit-btn {
-          width: 100%;
-          padding: 1rem 2rem;
-          background: #3a3226;
-          color: #f4f1e8;
-          border: none;
-          border-radius: 4px;
-          font-size: 1.1rem;
-          font-weight: bold;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover:not(:disabled) {
-          background: #2c2416;
-          transform: translateY(-2px);
-        }
-
-        .submit-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .message {
-          margin: 2rem 0;
-          padding: 1rem;
-          border-radius: 4px;
-          text-align: center;
-        }
-
-        .message.success {
-          background: #d4edda;
-          color: #155724;
-          border: 2px solid #c3e6cb;
-        }
-
-        .message.error {
-          background: #f8d7da;
-          color: #721c24;
-          border: 2px solid #f5c6cb;
-        }
-
-        .alternative-section {
-          background: #fff;
-          border: 2px dashed #3a3226;
-          border-radius: 8px;
-          padding: 2rem;
-          text-align: center;
-        }
-
-        .alternative-section h3 {
-          margin-bottom: 1rem;
-          color: #3a3226;
-        }
-
-        .phone-number {
-          font-size: 2rem;
-          font-weight: bold;
-          color: #d32f2f;
-          margin: 1rem 0;
-        }
-
-        .alternative-section p {
-          color: #666;
-        }
-
-        nav a.active {
-          background: rgba(244, 241, 232, 0.2);
-          font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-          .form-row {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
     </>
   );
 }
