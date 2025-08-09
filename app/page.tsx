@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '../lib/supabase';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 type ContentStats = {
   letters: number;
@@ -97,45 +99,14 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Airmail banner */}
-      <div className="airmail-banner"></div>
-
-      {/* Header */}
-      <header>
-        <div className="header-content">
-          <h1>Yo Tengo Por Voy</h1>
-          <p className="tagline">&quot;I have to go&quot; - Everett&apos;s broken Spanish that touched so many hearts</p>
-          <div className="journey-info">
-            <span>📍 Tampico, Illinois → Costa Rica</span>
-            <span>👨‍👩‍👧‍👦 Everett & Emma Gene Ulrich + 7 children</span>
-            <span>✈️ Journey began 1968</span>
-          </div>
-        </div>
-        <div className="postmark">
-          <div>TAMPICO</div>
-          <div className="year">1968</div>
-          <div>ILLINOIS</div>
-        </div>
-      </header>
-
-      {/* Navigation */}
-      <nav>
-        <ul>
-          <li><Link href="/browse?type=anecdote">Stories</Link></li>
-          <li><Link href="/browse?type=photo">Photos</Link></li>
-          <li><Link href="/browse?type=letter">Letters</Link></li>
-          <li><Link href="/timeline">Timeline</Link></li>
-          <li><Link href="/browse?type=recording">Interviews</Link></li>
-          <li><Link href="/upload">Contribute</Link></li>
-        </ul>
-      </nav>
+      <Header />
 
       {/* Main content */}
       <main>
         {/* Hero section */}
         <section className="hero-section">
           <h2>From Amish Mennonite Roots to Costa Rican Mission</h2>
-          <p className="hero-quote">&quot;Leaving everything familiar behind to answer God&apos;s call&quot;</p>
+          <p className="hero-quote">&ldquo;Leaving everything familiar behind to answer God&apos;s call&rdquo;</p>
           <p>In 1968, Everett and Emma Gene Ulrich made the extraordinary decision to leave their Amish Mennonite community in Tampico, Illinois, taking their seven children on a journey that would change countless lives. This is their story, and the story of all who came after.</p>
         </section>
 
@@ -184,9 +155,9 @@ export default function HomePage() {
           <p>Every story matters. Whether you have photos, letters, or just a memory to share, we want to hear from you.</p>
           
           <div className="phone-number">
-            📞 Call or Text: 1-800-MEMORIA
+            📞 Call or Text: (618) 3-PORVOY
           </div>
-          <p style={{color: '#666', fontSize: '0.9rem'}}>Leave a voice message with your story anytime</p>
+          <p style={{color: '#666', fontSize: '0.9rem'}}>Leave a voice message, send photos via text, or fax documents anytime</p>
           
           <div className="contribute-options">
             <Link href="/upload" className="contribute-btn">
@@ -221,13 +192,7 @@ export default function HomePage() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer>
-        <p>© 2024 Yo Tengo Por Voy Wiki | A Family Heritage Project</p>
-        <p style={{marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8}}>
-          Built with love to preserve the Ulrich family legacy
-        </p>
-      </footer>
+      <Footer />
     </>
   );
 }
