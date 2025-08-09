@@ -3,6 +3,8 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function UploadPage() {
   const [formData, setFormData] = useState({
@@ -129,27 +131,12 @@ export default function UploadPage() {
 
   return (
     <>
-      <div className="airmail-banner"></div>
-      
-      <header>
-        <div className="header-content">
-          <h1>CONTRIBUTE TO THE ARCHIVE</h1>
-          <p className="tagline">Share your piece of the family story</p>
-        </div>
-      </header>
-
-      <nav>
-        <ul>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/browse">Browse</Link></li>
-          <li><Link href="/timeline">Timeline</Link></li>
-          <li><Link href="/upload" className="active">Upload</Link></li>
-          <li><Link href="/write">Write</Link></li>
-          <li><Link href="/record">Record</Link></li>
-        </ul>
-      </nav>
+      <Header />
 
       <main>
+        <h1 style={{textAlign: 'center', marginBottom: '1rem'}}>Contribute to the Archive</h1>
+        <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your piece of the family story</p>
+        
         <form onSubmit={handleSubmit} className="upload-form">
           <div className="form-group">
             <label htmlFor="type">Type of Content</label>
@@ -294,10 +281,12 @@ export default function UploadPage() {
 
         <div className="phone-cta">
           <h3>Or Call Our Story Line</h3>
-          <p className="phone-number">📞 1-800-MEMORIA</p>
+          <p className="phone-number">📞 (618) 3-PORVOY</p>
           <p>Call anytime to leave your story as a voice message</p>
         </div>
       </main>
+
+      <Footer />
     </>
   );
 }
