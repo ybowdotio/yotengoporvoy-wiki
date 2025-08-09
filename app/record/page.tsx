@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '@/app/components/Header';
+import Footer from '@/app/components/Footer';
 
 export default function RecordPage() {
   const [isRecording, setIsRecording] = useState(false);
