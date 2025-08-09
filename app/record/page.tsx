@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function RecordPage() {
   const [isRecording, setIsRecording] = useState(false);
@@ -208,27 +210,12 @@ export default function RecordPage() {
 
   return (
     <>
-      <div className="airmail-banner"></div>
-      
-      <header>
-        <div className="header-content">
-          <h1>Record Your Story</h1>
-          <p className="tagline">Share your voice with future generations</p>
-        </div>
-      </header>
-
-      <nav>
-        <ul>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/browse">Browse</Link></li>
-          <li><Link href="/timeline">Timeline</Link></li>
-          <li><Link href="/upload">Upload Files</Link></li>
-          <li><Link href="/write">Write</Link></li>
-          <li><Link href="/record" className="active">Record</Link></li>
-        </ul>
-      </nav>
+      <Header />
 
       <main className="record-container">
+        <h1 style={{textAlign: 'center', marginBottom: '0.5rem'}}>Record Your Story</h1>
+        <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your voice with future generations</p>
+        
         <div className="recording-tips">
           <h3>🎤 Recording Tips</h3>
           <ul>
@@ -372,10 +359,12 @@ export default function RecordPage() {
 
         <div className="phone-cta">
           <h3>Or Call Our Story Line</h3>
-          <p className="phone-number">📞 1-800-MEMORIA</p>
+          <p className="phone-number">📞 (618) 3-PORVOY</p>
           <p>Call anytime to leave your story as a voice message</p>
         </div>
       </main>
+
+      <Footer />
     </>
   );
 }
