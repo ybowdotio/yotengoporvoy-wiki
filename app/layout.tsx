@@ -32,7 +32,7 @@ export default function RootLayout({
             </div>
             
             <h1>Yo Tengo Por Voy</h1>
-            <p className="tagline">"I have to go" - Everett's broken Spanish that touched hearts</p>
+            <p className="tagline">&ldquo;I have to go&rdquo; - Everett&apos;s broken Spanish that touched hearts</p>
             
             <div className="journey-info">
               <span>📍 Tampico, Illinois → Costa Rica</span>
@@ -103,7 +103,7 @@ export default function RootLayout({
             <div className="footer-info">
               <div className="footer-section">
                 <h4>The Journey</h4>
-                <p>Everett & Emma Gene Ulrich left their Amish Mennonite community in 1968 to establish a children's home in Costa Rica, bringing hope and love to countless lives.</p>
+                <p>Everett & Emma Gene Ulrich left their Amish Mennonite community in 1968 to establish a children&apos;s home in Costa Rica, bringing hope and love to countless lives.</p>
               </div>
               
               <div className="footer-section">
