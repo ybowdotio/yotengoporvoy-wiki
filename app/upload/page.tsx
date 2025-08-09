@@ -34,7 +34,7 @@ export default function UploadPage() {
         
         // Determine which bucket to use based on file type
         let bucketName = 'documents'; // default
-        let filePath = fileName;
+        const filePath = fileName; // Changed to const since we don't reassign
         
         // Map content types to appropriate buckets
         if (formData.type === 'photo' || ['jpg', 'jpeg', 'png', 'gif'].includes(fileExt?.toLowerCase() || '')) {
@@ -45,7 +45,7 @@ export default function UploadPage() {
           bucketName = 'video';
         }
 
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from(bucketName)
           .upload(filePath, file);
 
@@ -97,8 +97,9 @@ export default function UploadPage() {
       });
       setFile(null);
       
-    } catch (error: any) {
-      setMessage('❌ Error: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      setMessage('❌ Error: ' + errorMessage);
     } finally {
       setUploading(false);
     }
