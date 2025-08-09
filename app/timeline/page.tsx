@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 type TimelineItem = {
@@ -61,10 +62,10 @@ export default function TimelinePage() {
 
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/browse">Browse</a></li>
-          <li><a href="/timeline" className="active">Timeline</a></li>
-          <li><a href="/upload">Contribute</a></li>
+          <li><Link href="/">Home</Link></li>
+          <li><Link href="/browse">Browse</Link></li>
+          <li><Link href="/timeline" className="active">Timeline</Link></li>
+          <li><Link href="/upload">Contribute</Link></li>
         </ul>
       </nav>
 
