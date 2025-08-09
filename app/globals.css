@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ========================================
+   BASE STYLES
+   ======================================== */
 * {
     margin: 0;
     padding: 0;
@@ -14,7 +17,9 @@ body {
     min-height: 100vh;
 }
 
-/* Airmail banner */
+/* ========================================
+   AIRMAIL BANNER
+   ======================================== */
 .airmail-banner {
     background: repeating-linear-gradient(
         45deg,
@@ -29,10 +34,12 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Header */
+/* ========================================
+   HEADER
+   ======================================== */
 header {
     background: #fff;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 2.5rem;
     text-align: center;
     border-bottom: 3px solid #2c2416;
     position: relative;
@@ -74,7 +81,145 @@ h1 {
     gap: 0.5rem;
 }
 
-/* Postmark stamp effect */
+/* Header Phone CTA Section */
+.header-phone-cta {
+    margin: 2rem 0 1rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 253, 240, 0.9) 0%, rgba(255, 248, 231, 0.9) 100%);
+    border: 2px dashed #8B7355;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.header-phone-cta::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(139, 115, 85, 0.05) 10px,
+        rgba(139, 115, 85, 0.05) 20px
+    );
+    border-radius: 8px;
+    z-index: -1;
+}
+
+/* Every Memory Matters Title */
+.memory-matters {
+    font-family: 'Courier New', monospace;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c1810;
+    letter-spacing: 3px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+}
+
+.memory-matters::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #8B7355, transparent);
+}
+
+.phone-subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    font-style: italic;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Phone Display Box */
+.phone-display {
+    background: white;
+    border: 1px solid #8B7355;
+    border-radius: 6px;
+    padding: 1.5rem;
+    max-width: 400px;
+    margin: 1.5rem auto 0;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.phone-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(
+        90deg,
+        #d32f2f,
+        #d32f2f 10px,
+        #1976d2 10px,
+        #1976d2 20px,
+        #fff 20px,
+        #fff 30px
+    );
+    border-radius: 6px 6px 0 0;
+}
+
+.phone-methods {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.phone-methods span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.phone-number-main {
+    display: block;
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #B22222;
+    text-decoration: none;
+    letter-spacing: 2px;
+    margin: 0.5rem 0;
+    transition: all 0.3s ease;
+}
+
+.phone-number-main:hover {
+    color: #8B0000;
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(178, 34, 34, 0.2);
+}
+
+.phone-instruction {
+    font-size: 0.85rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 0.75rem;
+    font-family: 'Courier New', monospace;
+}
+
+/* Postmark Stamp */
 .postmark {
     position: absolute;
     top: 20px;
@@ -100,7 +245,9 @@ h1 {
     font-weight: bold;
 }
 
-/* Navigation */
+/* ========================================
+   NAVIGATION
+   ======================================== */
 nav {
     background: #3a3226;
     padding: 1rem;
@@ -134,13 +281,16 @@ nav a:hover {
     transform: translateY(-2px);
 }
 
-/* Main content */
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
 main {
     max-width: 1200px;
     margin: 3rem auto;
     padding: 0 1rem;
 }
 
+/* Hero Section */
 .hero-section {
     text-align: center;
     margin-bottom: 4rem;
@@ -177,7 +327,7 @@ main {
     color: #666;
 }
 
-/* Collection grid */
+/* Collection Grid */
 .collections {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -236,7 +386,7 @@ main {
     margin-top: 0.5rem;
 }
 
-/* Contribute section */
+/* Contribute Section */
 .contribute-section {
     background: #fff;
     border: 2px dashed #3a3226;
@@ -281,7 +431,7 @@ main {
     margin: 1rem 0;
 }
 
-/* Timeline preview */
+/* Timeline Preview */
 .timeline-preview {
     background: white;
     border: 2px solid #3a3226;
@@ -315,7 +465,350 @@ main {
     color: #2c2416;
 }
 
-/* Footer */
+/* ========================================
+   FORMS
+   ======================================== */
+.upload-form,
+.write-form,
+.record-form {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 253, 240, 0.9);
+    border: 1px solid #8B7355;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c1810;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group input[type="file"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #8B7355;
+    background: #FFFDF0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.85rem;
+    color: #666;
+    font-style: italic;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 0.5rem;
+    width: auto;
+}
+
+fieldset {
+    border: 1px dashed #8B7355;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    background: rgba(255, 253, 240, 0.5);
+}
+
+fieldset legend {
+    padding: 0 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #2c1810;
+}
+
+.submit-button {
+    background: #2c1810;
+    color: #FFFDF0;
+    padding: 1rem 2rem;
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 2rem auto 0;
+}
+
+.submit-button:hover:not(:disabled) {
+    background: #4a2c1f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Messages & Alerts */
+.message {
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Phone CTA Box (for other pages) */
+.phone-cta {
+    text-align: center;
+    margin: 3rem 0;
+    padding: 2rem;
+    background: #FFFDF0;
+    border: 2px dashed #8B7355;
+}
+
+.phone-cta h3 {
+    font-family: 'Courier New', monospace;
+    color: #2c1810;
+    margin-bottom: 1rem;
+}
+
+.phone-cta .phone-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #B22222;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+}
+
+/* ========================================
+   BROWSE PAGE
+   ======================================== */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.content-card {
+    background: #FFFDF0;
+    border: 1px solid #8B7355;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.content-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    background: #FFF8E7;
+}
+
+.card-date {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-family: 'Courier New', monospace;
+}
+
+.content-card h3 {
+    font-family: 'Courier New', monospace;
+    color: #2c1810;
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.card-description {
+    color: #444;
+    line-height: 1.6;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #8B7355;
+    font-size: 0.85rem;
+}
+
+.card-type {
+    background: #8B7355;
+    color: #FFFDF0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    text-transform: capitalize;
+}
+
+.card-contributor {
+    color: #666;
+    font-style: italic;
+}
+
+/* ========================================
+   MODAL
+   ======================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+}
+
+.modal-content {
+    background: #FFFDF0;
+    border: 2px solid #8B7355;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #8B7355;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #2c1810;
+    transform: rotate(90deg);
+}
+
+.modal-content h2 {
+    font-family: 'Courier New', monospace;
+    color: #2c1810;
+    margin-bottom: 1rem;
+    padding-right: 2rem;
+}
+
+.modal-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #8B7355;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.modal-meta span {
+    font-family: 'Courier New', monospace;
+}
+
+.modal-section {
+    margin: 1.5rem 0;
+}
+
+.modal-section h4 {
+    font-family: 'Courier New', monospace;
+    color: #2c1810;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.modal-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #8B7355;
+    text-align: right;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.no-items {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    font-family: 'Courier New', monospace;
+    color: #8B7355;
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
 footer {
     background: #3a3226;
     color: #f4f1e8;
@@ -324,10 +817,31 @@ footer {
     margin-top: 4rem;
 }
 
-/* Responsive */
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8rem;
+    }
+    
+    .memory-matters {
+        font-size: 1.4rem;
+        letter-spacing: 2px;
+    }
+    
+    .phone-display {
+        margin: 1rem auto 0;
+        padding: 1rem;
+    }
+    
+    .phone-number-main {
+        font-size: 1.6rem;
+    }
+    
+    .phone-methods {
+        font-size: 0.75rem;
+        gap: 1rem;
     }
     
     .postmark {
@@ -355,862 +869,27 @@ footer {
     }
 }
 
-/* Form Styles */
-.upload-form,
-.write-form,
-.record-form {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: rgba(255, 253, 240, 0.9);
-  border: 1px solid #8B7355;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #2c1810;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="date"],
-.form-group input[type="file"],
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #8B7355;
-  background: #FFFDF0;
-  font-family: 'Courier New', monospace;
-  font-size: 0.95rem;
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.form-group select {
-  cursor: pointer;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.checkbox-label input[type="checkbox"] {
-  margin-right: 0.5rem;
-  width: auto;
-}
-
-fieldset {
-  border: 1px dashed #8B7355;
-  padding: 1rem;
-  margin: 1.5rem 0;
-  background: rgba(255, 253, 240, 0.5);
-}
-
-fieldset legend {
-  padding: 0 0.5rem;
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-  color: #2c1810;
-}
-
-.submit-button {
-  background: #2c1810;
-  color: #FFFDF0;
-  padding: 1rem 2rem;
-  border: none;
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: block;
-  margin: 2rem auto 0;
-}
-
-.submit-button:hover:not(:disabled) {
-  background: #4a2c1f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.submit-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.message {
-  padding: 1rem;
-  margin: 1.5rem 0;
-  border-radius: 4px;
-  text-align: center;
-  font-family: 'Courier New', monospace;
-}
-
-.message.success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.message.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.phone-cta {
-  text-align: center;
-  margin: 3rem 0;
-  padding: 2rem;
-  background: #FFFDF0;
-  border: 2px dashed #8B7355;
-}
-
-.phone-cta h3 {
-  font-family: 'Courier New', monospace;
-  color: #2c1810;
-  margin-bottom: 1rem;
-}
-
-.phone-cta .phone-number {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #B22222;
-  margin: 1rem 0;
-  font-family: 'Courier New', monospace;
-}
-
-/* Small form adjustments */
-.form-group small {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.85rem;
-  color: #666;
-  font-style: italic;
-}
-
-/* Form Styles */
-.upload-form,
-.write-form,
-.record-form {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: rgba(255, 253, 240, 0.9);
-  border: 1px solid #8B7355;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #2c1810;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="date"],
-.form-group input[type="file"],
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #8B7355;
-  background: #FFFDF0;
-  font-family: 'Courier New', monospace;
-  font-size: 0.95rem;
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.form-group select {
-  cursor: pointer;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.checkbox-label input[type="checkbox"] {
-  margin-right: 0.5rem;
-  width: auto;
-}
-
-fieldset {
-  border: 1px dashed #8B7355;
-  padding: 1rem;
-  margin: 1.5rem 0;
-  background: rgba(255, 253, 240, 0.5);
-}
-
-fieldset legend {
-  padding: 0 0.5rem;
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-  color: #2c1810;
-}
-
-.submit-button {
-  background: #2c1810;
-  color: #FFFDF0;
-  padding: 1rem 2rem;
-  border: none;
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: block;
-  margin: 2rem auto 0;
-}
-
-.submit-button:hover:not(:disabled) {
-  background: #4a2c1f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.submit-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.message {
-  padding: 1rem;
-  margin: 1.5rem 0;
-  border-radius: 4px;
-  text-align: center;
-  font-family: 'Courier New', monospace;
-}
-
-.message.success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.message.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.phone-cta {
-  text-align: center;
-  margin: 3rem 0;
-  padding: 2rem;
-  background: #FFFDF0;
-  border: 2px dashed #8B7355;
-}
-
-.phone-cta h3 {
-  font-family: 'Courier New', monospace;
-  color: #2c1810;
-  margin-bottom: 1rem;
-}
-
-.phone-cta .phone-number {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #B22222;
-  margin: 1rem 0;
-  font-family: 'Courier New', monospace;
-}
-
-.form-group small {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.85rem;
-  color: #666;
-  font-style: italic;
-}
-
-/* Browse Page and Content Cards */
-.content-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  padding: 2rem;
-}
-
-.content-card {
-  background: #FFFDF0;
-  border: 1px solid #8B7355;
-  padding: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.content-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  background: #FFF8E7;
-}
-
-.card-date {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-  font-family: 'Courier New', monospace;
-}
-
-.content-card h3 {
-  font-family: 'Courier New', monospace;
-  color: #2c1810;
-  margin: 0.5rem 0;
-  font-size: 1.2rem;
-}
-
-.card-description {
-  color: #444;
-  line-height: 1.6;
-  margin: 1rem 0;
-  font-size: 0.95rem;
-}
-
-.card-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #8B7355;
-  font-size: 0.85rem;
-}
-
-.card-type {
-  background: #8B7355;
-  color: #FFFDF0;
-  padding: 0.25rem 0.5rem;
-  border-radius: 3px;
-  font-family: 'Courier New', monospace;
-  text-transform: capitalize;
-}
-
-.card-contributor {
-  color: #666;
-  font-style: italic;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
-}
-
-.modal-content {
-  background: #FFFDF0;
-  border: 2px solid #8B7355;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 2rem;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  color: #8B7355;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.modal-close:hover {
-  color: #2c1810;
-  transform: rotate(90deg);
-}
-
-.modal-content h2 {
-  font-family: 'Courier New', monospace;
-  color: #2c1810;
-  margin-bottom: 1rem;
-  padding-right: 2rem;
-}
-
-.modal-meta {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #8B7355;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.modal-meta span {
-  font-family: 'Courier New', monospace;
-}
-
-.modal-section {
-  margin: 1.5rem 0;
-}
-
-.modal-section h4 {
-  font-family: 'Courier New', monospace;
-  color: #2c1810;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-}
-
-.modal-footer {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #8B7355;
-  text-align: right;
-  color: #666;
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem;
-}
-
-.no-items {
-  text-align: center;
-  padding: 3rem;
-  color: #666;
-  font-family: 'Courier New', monospace;
-  font-size: 1.1rem;
-}
-
-.loading {
-  text-align: center;
-  padding: 3rem;
-  font-family: 'Courier New', monospace;
-  color: #8B7355;
-  font-size: 1.1rem;
-}
-
-/* Add these styles to your existing globals.css file */
-
-/* Phone Ribbon in Header */
-.phone-ribbon {
-  position: absolute;
-  top: -12px;
-  right: 20px;
-  background: linear-gradient(135deg, #fff 0%, #fffdf0 100%);
-  border: 2px solid #8B7355;
-  border-top: none;
-  padding: 0.75rem 1.5rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transform: perspective(20px) rotateX(-2deg);
-  z-index: 10;
-}
-
-.phone-ribbon::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 12px;
-  background: repeating-linear-gradient(
-    45deg,
-    #d32f2f,
-    #d32f2f 10px,
-    #1976d2 10px,
-    #1976d2 20px,
-    #fff 20px,
-    #fff 30px
-  );
-}
-
-.phone-icon {
-  font-size: 1.2rem;
-  animation: ring 2s ease-in-out infinite;
-}
-
-@keyframes ring {
-  0%, 100% { transform: rotate(0deg); }
-  10%, 30% { transform: rotate(-10deg); }
-  20%, 40% { transform: rotate(10deg); }
-}
-
-.phone-text {
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  color: #666;
-  font-style: italic;
-}
-
-.phone-number-header {
-  font-family: 'Courier New', monospace;
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #B22222;
-  text-decoration: none;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-}
-
-.phone-number-header:hover {
-  color: #8B0000;
-  transform: scale(1.05);
-}
-
-.phone-subtitle {
-  font-size: 0.75rem;
-  color: #888;
-  font-family: 'Courier New', monospace;
-  border-left: 1px solid #ccc;
-  padding-left: 0.5rem;
-  margin-left: 0.25rem;
-}
-
-/* Enhanced Footer */
-footer {
-  background: linear-gradient(180deg, #3a3226 0%, #2c2416 100%);
-  color: #f4f1e8;
-  margin-top: 4rem;
-  border-top: 12px solid;
-  border-image: repeating-linear-gradient(
-    45deg,
-    #d32f2f,
-    #d32f2f 10px,
-    #1976d2 10px,
-    #1976d2 20px,
-    #fff 20px,
-    #fff 30px
-  ) 12;
-}
-
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 3rem 1rem;
-}
-
-/* Footer Call to Action */
-.footer-contribute {
-  text-align: center;
-  padding: 2rem;
-  background: rgba(255, 253, 240, 0.1);
-  border-radius: 8px;
-  margin-bottom: 3rem;
-  border: 2px dashed rgba(244, 241, 232, 0.3);
-}
-
-.footer-contribute h3 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
-  font-family: 'Courier New', monospace;
-  color: #f4f1e8;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.footer-contribute p {
-  font-size: 1rem;
-  opacity: 0.9;
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Phone CTA in Footer */
-.phone-cta-footer {
-  background: #FFFDF0;
-  border-radius: 8px;
-  padding: 2rem;
-  margin: 1.5rem auto;
-  max-width: 500px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.phone-cta-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: repeating-linear-gradient(
-    90deg,
-    #d32f2f,
-    #d32f2f 10px,
-    #1976d2 10px,
-    #1976d2 20px
-  );
-}
-
-.phone-methods {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-}
-
-.method {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  color: #666;
-  font-size: 0.85rem;
-}
-
-.method-icon {
-  font-size: 1.5rem;
-}
-
-.phone-number-footer {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.25rem;
-  font-family: 'Courier New', monospace;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #B22222;
-  text-decoration: none;
-  margin: 1rem 0;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.phone-number-footer:hover {
-  color: #8B0000;
-  transform: scale(1.05);
-}
-
-.phone-number-footer::after {
-  content: '→';
-  position: absolute;
-  right: -30px;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.phone-number-footer:hover::after {
-  right: -25px;
-  opacity: 1;
-}
-
-.phone-prefix {
-  font-size: 2rem;
-  opacity: 0.8;
-}
-
-.phone-main {
-  font-size: 2.5rem;
-  letter-spacing: 2px;
-}
-
-.phone-instruction {
-  color: #666;
-  font-size: 0.9rem;
-  font-style: italic;
-  margin-top: 1rem;
-  font-family: 'Courier New', monospace;
-}
-
-/* Footer Info Sections */
-.footer-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin: 3rem 0;
-  padding-top: 2rem;
-  border-top: 1px dashed rgba(244, 241, 232, 0.3);
-}
-
-.footer-section h4 {
-  font-family: 'Courier New', monospace;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  color: #f4f1e8;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.footer-section p {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  opacity: 0.85;
-}
-
-.footer-links {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-links li {
-  margin-bottom: 0.5rem;
-}
-
-.footer-links a {
-  color: #f4f1e8;
-  text-decoration: none;
-  font-size: 0.9rem;
-  opacity: 0.85;
-  transition: all 0.3s ease;
-  display: inline-block;
-}
-
-.footer-links a:hover {
-  opacity: 1;
-  transform: translateX(4px);
-}
-
-.footer-stats {
-  list-style: none;
-  padding: 0;
-  font-family: 'Courier New', monospace;
-}
-
-.footer-stats li {
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  opacity: 0.85;
-}
-
-.footer-stats span {
-  font-weight: bold;
-  color: #ffd700;
-}
-
-/* Footer Bottom */
-.footer-bottom {
-  text-align: center;
-  padding-top: 2rem;
-  margin-top: 2rem;
-  border-top: 1px solid rgba(244, 241, 232, 0.2);
-}
-
-.footer-bottom p {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.footer-dedication {
-  font-style: italic;
-  margin-top: 0.5rem;
-  font-size: 0.85rem !important;
-  opacity: 0.7 !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .phone-ribbon {
-    position: static;
-    margin: 1rem auto;
-    width: fit-content;
-    transform: none;
-  }
-  
-  .phone-methods {
-    gap: 1rem;
-  }
-  
-  .phone-number-footer {
-    font-size: 2rem;
-  }
-  
-  .phone-main {
-    font-size: 2rem;
-  }
-  
-  .phone-prefix {
-    font-size: 1.6rem;
-  }
-  
-  .footer-info {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  
-  header {
-    padding-top: 3rem;
-  }
-}
-
-/* Special styling for Amish-friendly mobile view */
 @media (max-width: 480px) {
-  .phone-cta-footer {
-    padding: 1.5rem 1rem;
-  }
-  
-  .phone-methods {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .method {
-    flex-direction: row;
-    gap: 0.5rem;
-  }
-  
-  .phone-number-footer {
-    font-size: 1.5rem;
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  .phone-main,
-  .phone-prefix {
-    font-size: 1.5rem;
-  }
+    .memory-matters {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+    
+    .phone-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .phone-methods {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .phone-number-main {
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+    }
+    
+    .header-phone-cta {
+        padding: 1rem;
+    }
 }
