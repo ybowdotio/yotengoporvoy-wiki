@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 type ContentItem = {
@@ -23,11 +24,7 @@ export default function BrowsePage() {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<ContentItem | null>(null);
 
-  useEffect(() => {
-    fetchItems();
-  }, [type]);
-
-  async function fetchItems() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
       let query = supabase
@@ -47,7 +44,11 @@ export default function BrowsePage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [type]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
 
   const typeLabels: Record<string, string> = {
     letter: '✉️ Letters',
@@ -72,13 +73,13 @@ export default function BrowsePage() {
 
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/browse?type=all" className={type === 'all' ? 'active' : ''}>All</a></li>
-          <li><a href="/browse?type=letter" className={type === 'letter' ? 'active' : ''}>Letters</a></li>
-          <li><a href="/browse?type=diary" className={type === 'diary' ? 'active' : ''}>Diaries</a></li>
-          <li><a href="/browse?type=photo" className={type === 'photo' ? 'active' : ''}>Photos</a></li>
-          <li><a href="/browse?type=recording" className={type === 'recording' ? 'active' : ''}>Recordings</a></li>
-          <li><a href="/browse?type=anecdote" className={type === 'anecdote' ? 'active' : ''}>Stories</a></li>
+          <li><Link href="/">Home</Link></li>
+          <li><Link href="/browse?type=all" className={type === 'all' ? 'active' : ''}>All</Link></li>
+          <li><Link href="/browse?type=letter" className={type === 'letter' ? 'active' : ''}>Letters</Link></li>
+          <li><Link href="/browse?type=diary" className={type === 'diary' ? 'active' : ''}>Diaries</Link></li>
+          <li><Link href="/browse?type=photo" className={type === 'photo' ? 'active' : ''}>Photos</Link></li>
+          <li><Link href="/browse?type=recording" className={type === 'recording' ? 'active' : ''}>Recordings</Link></li>
+          <li><Link href="/browse?type=anecdote" className={type === 'anecdote' ? 'active' : ''}>Stories</Link></li>
         </ul>
       </nav>
 
