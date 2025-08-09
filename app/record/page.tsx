@@ -123,11 +123,11 @@ export default function RecordPage() {
         .from('audio')
         .getPublicUrl(fileName);
 
-      // Save to database
+// Save to database
       const { error: dbError } = await supabase
         .from('content_items')
         .insert({
-          type: 'recording',
+          content_type: 'audio_recording', // Using the correct enum value
           title: formData.title || 'Audio Recording',
           description: formData.description,
           content_date: formData.content_date || null,
@@ -135,11 +135,12 @@ export default function RecordPage() {
           contributor_name: formData.contributor_name,
           contributor_email: formData.contributor_email,
           contributor_phone: formData.contributor_phone,
-          source: 'web_recording',
+          source: 'web_upload',
           source_details: {
             audio_url: publicUrl,
             duration: recordingTime,
-            recorded_at: new Date().toISOString()
+            recorded_at: new Date().toISOString(),
+            recording_method: 'browser_recording'
           }
         });
 
