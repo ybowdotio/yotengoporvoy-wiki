@@ -3,6 +3,8 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function WritePage() {
   const [formData, setFormData] = useState({
@@ -73,26 +75,12 @@ export default function WritePage() {
 
   return (
     <>
-      <div className="airmail-banner"></div>
-      
-      <header>
-        <div className="header-content">
-          <h1>Write a Memory</h1>
-          <p className="tagline">Share your story with the family</p>
-        </div>
-      </header>
-
-      <nav>
-        <ul>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/browse">Browse</Link></li>
-          <li><Link href="/timeline">Timeline</Link></li>
-          <li><Link href="/upload">Upload Files</Link></li>
-          <li><Link href="/write" className="active">Write</Link></li>
-        </ul>
-      </nav>
+      <Header />
 
       <main className="write-container">
+        <h1 style={{textAlign: 'center', marginBottom: '0.5rem'}}>Write a Memory</h1>
+        <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your story with the family</p>
+        
         <div className="writing-tips">
           <h3>✍️ Writing Tips</h3>
           <ul>
@@ -229,6 +217,8 @@ export default function WritePage() {
           </div>
         )}
       </main>
+
+      <Footer />
 
       <style jsx>{`
         .write-container {
@@ -376,11 +366,6 @@ export default function WritePage() {
           background: #f8d7da;
           color: #721c24;
           border: 2px solid #f5c6cb;
-        }
-
-        nav a.active {
-          background: rgba(244, 241, 232, 0.2);
-          font-weight: bold;
         }
 
         @media (max-width: 768px) {
