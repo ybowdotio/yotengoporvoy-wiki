@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, ChangeEvent, FormEvent } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
 export default function UploadPage() {
@@ -19,6 +20,22 @@ export default function UploadPage() {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData(prev => ({ ...prev, [name]: checked }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setUploading(true);
@@ -34,14 +51,14 @@ export default function UploadPage() {
         
         // Determine which bucket to use based on file type
         let bucketName = 'documents'; // default
-        const filePath = fileName; // Changed to const since we don't reassign
+        const filePath = fileName;
         
         // Map content types to appropriate buckets
         if (formData.type === 'photo' || ['jpg', 'jpeg', 'png', 'gif'].includes(fileExt?.toLowerCase() || '')) {
           bucketName = 'photos';
-        } else if (formData.type === 'recording' || ['mp3', 'wav', 'ogg', 'm4a'].includes(fileExt?.toLowerCase() || '')) {
+        } else if (formData.type === 'audio_recording' || ['mp3', 'wav', 'ogg', 'm4a', 'webm'].includes(fileExt?.toLowerCase() || '')) {
           bucketName = 'audio';
-        } else if (['mp4', 'mov', 'avi'].includes(fileExt?.toLowerCase() || '')) {
+        } else if (formData.type === 'video' || ['mp4', 'mov', 'avi'].includes(fileExt?.toLowerCase() || '')) {
           bucketName = 'video';
         }
 
@@ -59,11 +76,11 @@ export default function UploadPage() {
         fileUrl = publicUrl;
       }
 
-      // Insert into content_items
+      // Insert into content_items with correct field names
       const { error: dbError } = await supabase
         .from('content_items')
         .insert({
-          type: formData.type,
+          type: formData.type, // This maps to the content_type enum
           title: formData.title,
           description: formData.description,
           content_text: formData.content_text,
@@ -72,6 +89,8 @@ export default function UploadPage() {
           contributor_email: formData.contributor_email,
           content_date: formData.content_date || null,
           date_is_approximate: formData.date_is_approximate,
+          is_public: true,
+          is_sensitive: false,
           source: 'web_upload',
           source_details: {
             original_file_url: fileUrl,
@@ -96,181 +115,189 @@ export default function UploadPage() {
         date_is_approximate: false
       });
       setFile(null);
+      // Reset file input
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
       
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-      setMessage('❌ Error: ' + errorMessage);
+      setMessage(`❌ Error: ${errorMessage}`);
     } finally {
       setUploading(false);
     }
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-    }));
-  };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const uploaded = e.target.files?.[0];
-    setFile(uploaded || null);
-  };
-
   return (
-    <main className="max-w-2xl mx-auto p-6">
-      <div className="paper-texture">
-        <h1 className="text-3xl font-bold mb-6 typewriter">CONTRIBUTE TO THE ARCHIVE</h1>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Content Type */}
-          <div>
-            <label className="block mb-2 font-bold">Type of Content</label>
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleInputChange}
-              className="w-full p-2 border-2 border-gray-300 rounded"
+    <>
+      <div className="airmail-banner"></div>
+      
+      <header>
+        <div className="header-content">
+          <h1>CONTRIBUTE TO THE ARCHIVE</h1>
+          <p className="tagline">Share your piece of the family story</p>
+        </div>
+      </header>
+
+      <nav>
+        <ul>
+          <li><Link href="/">Home</Link></li>
+          <li><Link href="/browse">Browse</Link></li>
+          <li><Link href="/timeline">Timeline</Link></li>
+          <li><Link href="/upload" className="active">Upload</Link></li>
+          <li><Link href="/write">Write</Link></li>
+          <li><Link href="/record">Record</Link></li>
+        </ul>
+      </nav>
+
+      <main>
+        <form onSubmit={handleSubmit} className="upload-form">
+          <div className="form-group">
+            <label htmlFor="type">Type of Content</label>
+            <select 
+              id="type"
+              name="type" 
+              value={formData.type} 
+              onChange={handleChange}
               required
             >
               <option value="letter">Letter</option>
-              <option value="diary">Diary Entry</option>
-              <option value="photo">Photograph</option>
-              <option value="recording">Audio Recording</option>
-              <option value="anecdote">Story/Anecdote</option>
+              <option value="diary_entry">Diary Entry</option>
+              <option value="photo">Photo</option>
+              <option value="audio_recording">Audio Recording</option>
+              <option value="video">Video</option>
               <option value="news_clipping">News Clipping</option>
-              <option value="document">Other Document</option>
+              <option value="anecdote">Anecdote/Story</option>
+              <option value="interview">Interview</option>
+              <option value="document">Document</option>
+              <option value="transcript">Transcript</option>
             </select>
           </div>
 
-          {/* Title */}
-          <div>
-            <label className="block mb-2 font-bold">Title</label>
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
             <input
               type="text"
+              id="title"
               name="title"
               value={formData.title}
-              onChange={handleInputChange}
-              className="w-full p-2 border-2 border-gray-300 rounded"
+              onChange={handleChange}
               placeholder="e.g., Letter from Emma Gene to her mother"
               required
             />
           </div>
 
-          {/* Description */}
-          <div>
-            <label className="block mb-2 font-bold">Brief Description</label>
+          <div className="form-group">
+            <label htmlFor="description">Brief Description</label>
             <textarea
+              id="description"
               name="description"
               value={formData.description}
-              onChange={handleInputChange}
-              className="w-full p-2 border-2 border-gray-300 rounded h-24"
+              onChange={handleChange}
+              rows={4}
               placeholder="Provide context about this item..."
             />
           </div>
 
-          {/* Content/Transcription */}
-          <div>
-            <label className="block mb-2 font-bold">
-              Content/Transcription (if applicable)
-            </label>
+          <div className="form-group">
+            <label htmlFor="content_text">Content/Transcription (if applicable)</label>
             <textarea
+              id="content_text"
               name="content_text"
               value={formData.content_text}
-              onChange={handleInputChange}
-              className="w-full p-2 border-2 border-gray-300 rounded h-32 font-mono text-sm"
+              onChange={handleChange}
+              rows={8}
               placeholder="Type or paste the full text here..."
             />
           </div>
 
-          {/* Date */}
-          <div>
-            <label className="block mb-2 font-bold">Date (when was this created?)</label>
+          <div className="form-group">
+            <label htmlFor="content_date">Date (when was this created?)</label>
             <input
               type="date"
+              id="content_date"
               name="content_date"
               value={formData.content_date}
-              onChange={handleInputChange}
-              className="w-full p-2 border-2 border-gray-300 rounded"
+              onChange={handleChange}
             />
-            <label className="flex items-center mt-2">
+            <label className="checkbox-label">
               <input
                 type="checkbox"
                 name="date_is_approximate"
                 checked={formData.date_is_approximate}
-                onChange={handleInputChange}
-                className="mr-2"
+                onChange={handleChange}
               />
               This date is approximate
             </label>
           </div>
 
-          {/* File Upload */}
-          <div>
-            <label className="block mb-2 font-bold">Upload File (optional)</label>
+          <div className="form-group">
+            <label htmlFor="file">Upload File (optional)</label>
             <input
               type="file"
+              id="file"
               onChange={handleFileChange}
-              className="w-full p-2 border-2 border-gray-300 rounded"
-              accept=".jpg,.jpeg,.png,.pdf,.mp3,.wav,.doc,.docx"
+              accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt"
             />
-            <p className="text-sm text-gray-600 mt-1">
-              Supported: Images, PDFs, Audio files, Word documents
-            </p>
+            <small>Supported: Images, PDFs, Audio files, Word documents</small>
           </div>
 
-          {/* Contributor Info */}
-          <div className="border-t-2 border-gray-300 pt-4 mt-6">
-            <h3 className="font-bold mb-4">Your Information (Optional)</h3>
+          <fieldset>
+            <legend>Your Information (Optional)</legend>
             
-            <div className="space-y-3">
+            <div className="form-group">
+              <label htmlFor="contributor_name">Your name</label>
               <input
                 type="text"
+                id="contributor_name"
                 name="contributor_name"
                 value={formData.contributor_name}
-                onChange={handleInputChange}
-                className="w-full p-2 border-2 border-gray-300 rounded"
+                onChange={handleChange}
                 placeholder="Your name"
               />
-              
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="contributor_email">Your email</label>
               <input
                 type="email"
+                id="contributor_email"
                 name="contributor_email"
                 value={formData.contributor_email}
-                onChange={handleInputChange}
-                className="w-full p-2 border-2 border-gray-300 rounded"
-                placeholder="Your email"
-              />
-              
-              <input
-                type="tel"
-                name="contributor_phone"
-                value={formData.contributor_phone}
-                onChange={handleInputChange}
-                className="w-full p-2 border-2 border-gray-300 rounded"
-                placeholder="Your phone number"
+                onChange={handleChange}
+                placeholder="your.email@example.com"
               />
             </div>
-          </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="btn-vintage w-full"
-            disabled={uploading}
-          >
+            <div className="form-group">
+              <label htmlFor="contributor_phone">Your phone number</label>
+              <input
+                type="tel"
+                id="contributor_phone"
+                name="contributor_phone"
+                value={formData.contributor_phone}
+                onChange={handleChange}
+                placeholder="(555) 123-4567"
+              />
+            </div>
+          </fieldset>
+
+          <button type="submit" disabled={uploading} className="submit-button">
             {uploading ? 'Uploading...' : 'Submit to Archive'}
           </button>
+
+          {message && (
+            <div className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
+              {message}
+            </div>
+          )}
         </form>
 
-        {/* Message */}
-        {message && (
-          <div className={`mt-6 p-4 rounded ${message.includes('✅') ? 'bg-green-100' : 'bg-red-100'}`}>
-            {message}
-          </div>
-        )}
-      </div>
-    </main>
+        <div className="phone-cta">
+          <h3>Or Call Our Story Line</h3>
+          <p className="phone-number">📞 1-800-MEMORIA</p>
+          <p>Call anytime to leave your story as a voice message</p>
+        </div>
+      </main>
+    </>
   );
 }
