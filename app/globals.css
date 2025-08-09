@@ -1,26 +1,353 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Courier New', monospace;
+    background: #f4f1e8;
+    color: #2c2416;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Airmail banner */
+.airmail-banner {
+    background: repeating-linear-gradient(
+        45deg,
+        #d32f2f,
+        #d32f2f 10px,
+        #1976d2 10px,
+        #1976d2 20px,
+        #fff 20px,
+        #fff 30px
+    );
+    height: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Header */
+header {
+    background: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+    border-bottom: 3px solid #2c2416;
+    position: relative;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    color: #2c2416;
+}
+
+.tagline {
+    font-style: italic;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.journey-info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.journey-info span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Postmark stamp effect */
+.postmark {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 120px;
+    height: 120px;
+    border: 3px solid #d32f2f;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-15deg);
+    opacity: 0.5;
+    font-size: 0.8rem;
+    color: #d32f2f;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.postmark .year {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Navigation */
+nav {
+    background: #3a3226;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+nav a {
+    color: #f4f1e8;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+nav a:hover {
+    background: rgba(244, 241, 232, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Main content */
+main {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding: 2rem;
+    background: white;
+    border: 2px solid #3a3226;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 3px 3px 0 rgba(58, 50, 38, 0.1);
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    background: repeating-linear-gradient(
+        90deg,
+        #3a3226,
+        #3a3226 2px,
+        transparent 2px,
+        transparent 4px
+    );
+    opacity: 0.3;
+}
+
+.hero-quote {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin: 1rem 0;
+    color: #666;
+}
+
+/* Collection grid */
+.collections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.collection-card {
+    background: white;
+    border: 2px solid #3a3226;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.collection-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: repeating-linear-gradient(
+        90deg,
+        #d32f2f,
+        #d32f2f 10px,
+        #1976d2 10px,
+        #1976d2 20px
+    );
+}
+
+.collection-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.collection-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #2c2416;
+}
+
+.collection-count {
+    display: inline-block;
+    background: #3a3226;
+    color: #f4f1e8;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+/* Contribute section */
+.contribute-section {
+    background: #fff;
+    border: 2px dashed #3a3226;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.contribute-options {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.contribute-btn {
+    background: #3a3226;
+    color: #f4f1e8;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.contribute-btn:hover {
+    background: #2c2416;
+    transform: translateY(-2px);
+}
+
+.phone-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #d32f2f;
+    margin: 1rem 0;
+}
+
+/* Timeline preview */
+.timeline-preview {
+    background: white;
+    border: 2px solid #3a3226;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px dashed #ccc;
+    align-items: flex-start;
+}
+
+.timeline-item:last-child {
+    border-bottom: none;
+}
+
+.timeline-year {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3a3226;
+    min-width: 80px;
+}
+
+.timeline-content h4 {
+    margin-bottom: 0.5rem;
+    color: #2c2416;
+}
+
+/* Footer */
+footer {
+    background: #3a3226;
+    color: #f4f1e8;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .postmark {
+        width: 80px;
+        height: 80px;
+        font-size: 0.6rem;
+    }
+    
+    .postmark .year {
+        font-size: 1rem;
+    }
+
+    nav ul {
+        gap: 0.5rem;
+    }
+
+    .timeline-item {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .contribute-options {
+        flex-direction: column;
+        align-items: center;
+    }
 }
