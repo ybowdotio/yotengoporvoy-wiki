@@ -12,6 +12,8 @@ export default function RecordPage() {
   const [message, setMessage] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState('');
+  const [audioError, setAudioError] = useState(false);
+  const [recordingKept, setRecordingKept] = useState(false);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -65,7 +67,17 @@ export default function RecordPage() {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      
+      // Check for supported MIME types
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm') 
+        ? 'audio/webm' 
+        : MediaRecorder.isTypeSupported('audio/mp4')
+        ? 'audio/mp4'
+        : 'audio/ogg';
+      
+      const options = { mimeType };
+      
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
@@ -76,7 +88,8 @@ export default function RecordPage() {
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        // Use the same MIME type that was used for recording
+        const blob = new Blob(chunksRef.current, { type: mimeType });
         setAudioBlob(blob);
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
@@ -116,11 +129,16 @@ export default function RecordPage() {
   };
 
   const reRecord = () => {
+    if (audioUrl) {
+      URL.revokeObjectURL(audioUrl);
+    }
     setAudioBlob(null);
     setAudioUrl(null);
     setRecordingTime(0);
     setShowForm(false);
     setMessage('');
+    setAudioError(false);
+    setRecordingKept(false);
   };
 
   const formatTime = (seconds: number) => {
@@ -141,12 +159,15 @@ export default function RecordPage() {
     setMessage('');
 
     try {
-      const fileName = `recording-${Date.now()}.webm`;
+      // Determine file extension based on blob type
+      const fileExtension = audioBlob.type.includes('mp4') ? 'mp4' : 
+                           audioBlob.type.includes('ogg') ? 'ogg' : 'webm';
+      const fileName = `recording-${Date.now()}.${fileExtension}`;
       
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('audio')
         .upload(fileName, audioBlob, {
-          contentType: audioBlob.type || 'audio/webm',
+          contentType: audioBlob.type,
           cacheControl: '3600',
           upsert: false
         });
@@ -197,6 +218,7 @@ export default function RecordPage() {
           contributor_email: '',
           contributor_phone: ''
         });
+        setRecordingKept(false);
       }, 3000);
 
     } catch (error: unknown) {
@@ -264,17 +286,60 @@ export default function RecordPage() {
           {audioUrl && !isRecording && (
             <div className="playback-section">
               <h3>Listen to Your Recording</h3>
-              <audio controls src={audioUrl} style={{ width: '100%', margin: '1rem 0' }} />
+              {!audioError ? (
+                <audio 
+                  controls 
+                  src={audioUrl} 
+                  style={{ width: '100%', margin: '1rem 0' }}
+                  playsInline
+                  preload="metadata"
+                  onError={() => {
+                    console.error('Audio playback error');
+                    setAudioError(true);
+                  }}
+                >
+                  Your browser does not support the audio element.
+                </audio>
+              ) : (
+                <div style={{ 
+                  padding: '1rem', 
+                  background: '#FFF8E7', 
+                  border: '1px dashed #8B7355',
+                  borderRadius: '4px',
+                  margin: '1rem 0',
+                  textAlign: 'center'
+                }}>
+                  <p style={{ color: '#666', marginBottom: '0.5rem' }}>
+                    Recording saved successfully! 
+                  </p>
+                  <p style={{ fontSize: '0.9rem', color: '#888' }}>
+                    {recordingTime > 0 && `Duration: ${formatTime(recordingTime)}`}
+                  </p>
+                  <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '0.5rem' }}>
+                    (Preview may not be available on some mobile devices, but your recording is safe)
+                  </p>
+                </div>
+              )}
               <div className="playback-actions">
                 <button onClick={reRecord} className="action-button">
                   🔄 Record Again
                 </button>
                 <button 
-                  onClick={() => setShowForm(true)} 
+                  onClick={() => {
+                    setRecordingKept(true);
+                    setShowForm(true);
+                  }} 
                   className="action-button primary"
-                  style={{ background: '#2c1810', color: '#FFFDF0' }}
+                  style={{ 
+                    background: recordingKept ? '#4CAF50' : '#2c1810', 
+                    color: '#FFFDF0',
+                    border: recordingKept ? '2px solid #4CAF50' : '2px solid #8B7355',
+                    transform: recordingKept ? 'scale(0.98)' : 'scale(1)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  disabled={recordingKept}
                 >
-                  ✓ Keep This Recording
+                  {recordingKept ? '✅ Recording Kept!' : '✓ Keep This Recording'}
                 </button>
               </div>
             </div>
