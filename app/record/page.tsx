@@ -3,8 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/Footer';
 
 export default function RecordPage() {
   const [isRecording, setIsRecording] = useState(false);
@@ -209,162 +207,156 @@ export default function RecordPage() {
   };
 
   return (
-    <>
-      <Header />
+    <main className="record-container">
+      <h1 style={{textAlign: 'center', marginBottom: '0.5rem'}}>Record Your Story</h1>
+      <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your voice with future generations</p>
+      
+      <div className="recording-tips">
+        <h3>🎤 Recording Tips</h3>
+        <ul>
+          <li>Find a quiet space with minimal background noise</li>
+          <li>Speak clearly and at a comfortable pace</li>
+          <li>Share names, dates, and places when you remember them</li>
+          <li>Feel free to pause and gather your thoughts</li>
+          <li>Maximum recording time: 10 minutes</li>
+        </ul>
+      </div>
 
-      <main className="record-container">
-        <h1 style={{textAlign: 'center', marginBottom: '0.5rem'}}>Record Your Story</h1>
-        <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your voice with future generations</p>
-        
-        <div className="recording-tips">
-          <h3>🎤 Recording Tips</h3>
-          <ul>
-            <li>Find a quiet space with minimal background noise</li>
-            <li>Speak clearly and at a comfortable pace</li>
-            <li>Share names, dates, and places when you remember them</li>
-            <li>Feel free to pause and gather your thoughts</li>
-            <li>Maximum recording time: 10 minutes</li>
-          </ul>
-        </div>
-
-        <div className="recording-interface">
-          {!isRecording && !audioUrl && (
-            <button onClick={startRecording} className="record-button">
-              🔴 Start Recording
-            </button>
-          )}
-
-          {isRecording && (
-            <div className="recording-active">
-              <div className="recording-indicator">
-                <span className="pulse"></span>
-                Recording... {formatTime(recordingTime)}
-              </div>
-              <button onClick={stopRecording} className="stop-button">
-                ⏹️ Stop Recording
-              </button>
-            </div>
-          )}
-
-          {audioUrl && !isRecording && (
-            <div className="playback-section">
-              <h3>Review Your Recording</h3>
-              <audio controls src={audioUrl} />
-              <div className="recording-actions">
-                <button onClick={startRecording} className="rerecord-button">
-                  🔄 Record Again
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {audioUrl && (
-          <form onSubmit={handleSubmit} className="record-form">
-            <h3>Add Details About Your Recording</h3>
-            
-            <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="e.g., Memories of the journey to Costa Rica"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                rows={4}
-                placeholder="What is this recording about?"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="content_date">Date (when did this happen?)</label>
-              <input
-                type="date"
-                id="content_date"
-                name="content_date"
-                value={formData.content_date}
-                onChange={handleInputChange}
-              />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="date_is_approximate"
-                  checked={formData.date_is_approximate}
-                  onChange={handleInputChange}
-                />
-                This date is approximate
-              </label>
-            </div>
-
-            <fieldset>
-              <legend>Your Information (Optional)</legend>
-              
-              <div className="form-group">
-                <label htmlFor="contributor_name">Your name</label>
-                <input
-                  type="text"
-                  id="contributor_name"
-                  name="contributor_name"
-                  value={formData.contributor_name}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="contributor_email">Your email</label>
-                <input
-                  type="email"
-                  id="contributor_email"
-                  name="contributor_email"
-                  value={formData.contributor_email}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="contributor_phone">Your phone</label>
-                <input
-                  type="tel"
-                  id="contributor_phone"
-                  name="contributor_phone"
-                  value={formData.contributor_phone}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </fieldset>
-
-            <button type="submit" disabled={uploading} className="submit-button">
-              {uploading ? 'Uploading...' : 'Save Recording'}
-            </button>
-          </form>
+      <div className="recording-interface">
+        {!isRecording && !audioUrl && (
+          <button onClick={startRecording} className="record-button">
+            🔴 Start Recording
+          </button>
         )}
 
-        {message && (
-          <div className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
-            {message}
+        {isRecording && (
+          <div className="recording-active">
+            <div className="recording-indicator">
+              <span className="pulse"></span>
+              Recording... {formatTime(recordingTime)}
+            </div>
+            <button onClick={stopRecording} className="stop-button">
+              ⏹️ Stop Recording
+            </button>
           </div>
         )}
 
-        <div className="phone-cta">
-          <h3>Or Call Our Story Line</h3>
-          <p className="phone-number">📞 (618) 3-PORVOY</p>
-          <p>Call anytime to leave your story as a voice message</p>
-        </div>
-      </main>
+        {audioUrl && !isRecording && (
+          <div className="playback-section">
+            <h3>Review Your Recording</h3>
+            <audio controls src={audioUrl} />
+            <div className="recording-actions">
+              <button onClick={startRecording} className="rerecord-button">
+                🔄 Record Again
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
-      <Footer />
-    </>
+      {audioUrl && (
+        <form onSubmit={handleSubmit} className="record-form">
+          <h3>Add Details About Your Recording</h3>
+          
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="e.g., Memories of the journey to Costa Rica"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={4}
+              placeholder="What is this recording about?"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="content_date">Date (when did this happen?)</label>
+            <input
+              type="date"
+              id="content_date"
+              name="content_date"
+              value={formData.content_date}
+              onChange={handleInputChange}
+            />
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                name="date_is_approximate"
+                checked={formData.date_is_approximate}
+                onChange={handleInputChange}
+              />
+              This date is approximate
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>Your Information (Optional)</legend>
+            
+            <div className="form-group">
+              <label htmlFor="contributor_name">Your name</label>
+              <input
+                type="text"
+                id="contributor_name"
+                name="contributor_name"
+                value={formData.contributor_name}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="contributor_email">Your email</label>
+              <input
+                type="email"
+                id="contributor_email"
+                name="contributor_email"
+                value={formData.contributor_email}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="contributor_phone">Your phone</label>
+              <input
+                type="tel"
+                id="contributor_phone"
+                name="contributor_phone"
+                value={formData.contributor_phone}
+                onChange={handleInputChange}
+              />
+            </div>
+          </fieldset>
+
+          <button type="submit" disabled={uploading} className="submit-button">
+            {uploading ? 'Uploading...' : 'Save Recording'}
+          </button>
+        </form>
+      )}
+
+      {message && (
+        <div className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
+          {message}
+        </div>
+      )}
+
+      <div className="phone-cta">
+        <h3>Or Call Our Story Line</h3>
+        <p className="phone-number">📞 (618) 3-PORVOY</p>
+        <p>Call anytime to leave your story as a voice message</p>
+      </div>
+    </main>
   );
 }
