@@ -24,7 +24,7 @@ export default function Header() {
           </div>
 
           <h1>Yo Tengo Por Voy</h1>
-          <p className="tagline">&ldquo;I have to go&rdquo; - Everett&apos;s broken Spanish that touched hearts</p>
+          <p className="tagline">&ldquo;I have to go&rdquo; - Everett&apos;s broken Spanish that amused and touched the Tico&apos;s hearts!</p>
           
           <div className="journey-info">
             <span>📍 Tampico, Illinois → Costa Rica</span>
