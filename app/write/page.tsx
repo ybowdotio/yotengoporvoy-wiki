@@ -51,7 +51,7 @@ export default function WritePage() {
           contributor_phone: formData.contributor_phone,
           is_public: true,
           is_sensitive: false,
-          source: 'web_form',
+          source: 'web_upload',
           source_details: {
             location: formData.location,
             people_mentioned: formData.people_mentioned,
