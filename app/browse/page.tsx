@@ -38,28 +38,46 @@ function BrowseContent() {
         .eq('is_public', true)  // Only show public items
         .order('content_date', { ascending: false });
 
-      // Map URL params to database enum values
+      // Map URL params to database enum values - handle both singular and plural
       const typeMapping: Record<string, string> = {
         'letters': 'letter',
+        'letter': 'letter',
         'diaries': 'diary_entry',
+        'diary': 'diary_entry',
         'photos': 'photo',
+        'photo': 'photo',
         'recordings': 'audio_recording',
+        'recording': 'audio_recording',  // Added singular mapping
+        'audio_recording': 'audio_recording',  // Direct mapping
         'stories': 'anecdote',
+        'story': 'anecdote',
+        'anecdote': 'anecdote',
         'videos': 'video',
+        'video': 'video',
         'news': 'news_clipping',
+        'news_clipping': 'news_clipping',
         'interviews': 'interview',
+        'interview': 'interview',
         'documents': 'document',
-        'transcripts': 'transcript'
+        'document': 'document',
+        'transcripts': 'transcript',
+        'transcript': 'transcript'
       };
 
-      if (type !== 'all' && typeMapping[type]) {
-        query = query.eq('type', typeMapping[type]);
-      } else if (type !== 'all') {
-        query = query.eq('type', type);
+      if (type !== 'all') {
+        const mappedType = typeMapping[type] || type;
+        console.log('Filtering by type:', mappedType); // Debug log
+        query = query.eq('type', mappedType);
       }
 
       const { data, error } = await query;
-      if (error) throw error;
+      
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
+      
+      console.log(`Found ${data?.length || 0} items for type: ${type}`); // Debug log
       setItems(data || []);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -77,6 +95,7 @@ function BrowseContent() {
     diary_entry: '📚 Diaries',
     photo: '📸 Photos',
     audio_recording: '🎙️ Recordings',
+    recording: '🎙️ Recordings',  // Added for URL param
     video: '📹 Videos',
     news_clipping: '📰 News',
     anecdote: '💭 Stories',
@@ -96,7 +115,14 @@ function BrowseContent() {
       {loading ? (
         <div className="loading">Loading content...</div>
       ) : items.length === 0 ? (
-        <div className="no-items">No items found in this category.</div>
+        <div className="no-items">
+          No items found in this category.
+          {type === 'recording' && (
+            <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#666' }}>
+              Try recording a story or calling (618) 3-PORVOY to contribute!
+            </p>
+          )}
+        </div>
       ) : (
         <div className="content-grid">
           {items.map(item => (
@@ -160,9 +186,11 @@ function BrowseContent() {
             {selectedItem.type === 'audio_recording' && selectedItem.source_details?.audio_url && (
               <div className="modal-section">
                 <h4>Audio Recording</h4>
-                <audio controls style={{ width: '100%' }}>
+                <audio controls style={{ width: '100%' }} playsInline>
                   <source src={selectedItem.source_details.audio_url} type="audio/webm" />
+                  <source src={selectedItem.source_details.audio_url} type="audio/mp4" />
                   <source src={selectedItem.source_details.audio_url} type="audio/mpeg" />
+                  <source src={selectedItem.source_details.audio_url} type="audio/ogg" />
                   Your browser does not support the audio element.
                 </audio>
               </div>
@@ -177,6 +205,27 @@ function BrowseContent() {
                   alt={selectedItem.title || 'Photo'} 
                   style={{ maxWidth: '100%', height: 'auto' }}
                 />
+              </div>
+            )}
+
+            {selectedItem.type === 'document' && selectedItem.source_details?.original_file_url && (
+              <div className="modal-section">
+                <h4>Document</h4>
+                <a 
+                  href={selectedItem.source_details.original_file_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ 
+                    display: 'inline-block', 
+                    padding: '0.5rem 1rem', 
+                    background: '#3a3226', 
+                    color: 'white', 
+                    textDecoration: 'none',
+                    borderRadius: '4px'
+                  }}
+                >
+                  📄 View Document
+                </a>
               </div>
             )}
 
