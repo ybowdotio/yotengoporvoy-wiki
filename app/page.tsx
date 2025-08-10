@@ -40,7 +40,7 @@ export default function HomePage() {
 
   async function fetchContent() {
     try {
-      // Fetch counts by type
+      // Fetch counts by type - using correct database enum values
       const { count: letterCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
@@ -54,12 +54,12 @@ export default function HomePage() {
       const { count: diaryCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
-        .eq('type', 'diary');
+        .eq('type', 'diary_entry');  // Fixed: was 'diary', should be 'diary_entry'
 
       const { count: recordingCount } = await supabase
         .from('content_items')
         .select('*', { count: 'exact', head: true })
-        .eq('type', 'recording');
+        .eq('type', 'audio_recording');  // Fixed: was 'recording', should be 'audio_recording'
 
       const { count: newsCount } = await supabase
         .from('content_items')
@@ -177,8 +177,8 @@ export default function HomePage() {
               </div>
               <div className="timeline-content">
                 <h4>{item.title || 'Untitled'}</h4>
-                <p>{item.description || `A ${item.type} contributed by ${item.contributor_name || 'Anonymous'}`}</p>
-                <small style={{color: '#666'}}>Type: {item.type}</small>
+                <p>{item.description || `A ${item.type.replace(/_/g, ' ')} contributed by ${item.contributor_name || 'Anonymous'}`}</p>
+                <small style={{color: '#666'}}>Type: {item.type.replace(/_/g, ' ')}</small>
               </div>
             </div>
           ))}
