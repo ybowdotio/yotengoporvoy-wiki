@@ -3,8 +3,6 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/Footer';
 
 export default function WritePage() {
   const [formData, setFormData] = useState({
@@ -75,8 +73,6 @@ export default function WritePage() {
 
   return (
     <>
-      <Header />
-
       <main className="write-container">
         <h1 style={{textAlign: 'center', marginBottom: '0.5rem'}}>Write a Memory</h1>
         <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your story with the family</p>
@@ -217,8 +213,6 @@ export default function WritePage() {
           </div>
         )}
       </main>
-
-      <Footer />
 
       <style jsx>{`
         .write-container {
