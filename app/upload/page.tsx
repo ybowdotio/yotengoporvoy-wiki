@@ -3,8 +3,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/Footer';
 
 export default function UploadPage() {
   const [formData, setFormData] = useState({
@@ -130,163 +128,157 @@ export default function UploadPage() {
   };
 
   return (
-    <>
-      <Header />
+    <main>
+      <h1 style={{textAlign: 'center', marginBottom: '1rem'}}>Contribute to the Archive</h1>
+      <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your piece of the family story</p>
+      
+      <form onSubmit={handleSubmit} className="upload-form">
+        <div className="form-group">
+          <label htmlFor="type">Type of Content</label>
+          <select 
+            id="type"
+            name="type" 
+            value={formData.type} 
+            onChange={handleChange}
+            required
+          >
+            <option value="letter">Letter</option>
+            <option value="diary_entry">Diary Entry</option>
+            <option value="photo">Photo</option>
+            <option value="audio_recording">Audio Recording</option>
+            <option value="video">Video</option>
+            <option value="news_clipping">News Clipping</option>
+            <option value="anecdote">Anecdote/Story</option>
+            <option value="interview">Interview</option>
+            <option value="document">Document</option>
+            <option value="transcript">Transcript</option>
+          </select>
+        </div>
 
-      <main>
-        <h1 style={{textAlign: 'center', marginBottom: '1rem'}}>Contribute to the Archive</h1>
-        <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your piece of the family story</p>
-        
-        <form onSubmit={handleSubmit} className="upload-form">
-          <div className="form-group">
-            <label htmlFor="type">Type of Content</label>
-            <select 
-              id="type"
-              name="type" 
-              value={formData.type} 
+        <div className="form-group">
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="e.g., Letter from Emma Gene to her mother"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="description">Brief Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            rows={4}
+            placeholder="Provide context about this item..."
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="content_text">Content/Transcription (if applicable)</label>
+          <textarea
+            id="content_text"
+            name="content_text"
+            value={formData.content_text}
+            onChange={handleChange}
+            rows={8}
+            placeholder="Type or paste the full text here..."
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="content_date">Date (when was this created?)</label>
+          <input
+            type="date"
+            id="content_date"
+            name="content_date"
+            value={formData.content_date}
+            onChange={handleChange}
+          />
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              name="date_is_approximate"
+              checked={formData.date_is_approximate}
               onChange={handleChange}
-              required
-            >
-              <option value="letter">Letter</option>
-              <option value="diary_entry">Diary Entry</option>
-              <option value="photo">Photo</option>
-              <option value="audio_recording">Audio Recording</option>
-              <option value="video">Video</option>
-              <option value="news_clipping">News Clipping</option>
-              <option value="anecdote">Anecdote/Story</option>
-              <option value="interview">Interview</option>
-              <option value="document">Document</option>
-              <option value="transcript">Transcript</option>
-            </select>
-          </div>
+            />
+            This date is approximate
+          </label>
+        </div>
 
+        <div className="form-group">
+          <label htmlFor="file">Upload File (optional)</label>
+          <input
+            type="file"
+            id="file"
+            onChange={handleFileChange}
+            accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt"
+          />
+          <small>Supported: Images, PDFs, Audio files, Word documents</small>
+        </div>
+
+        <fieldset>
+          <legend>Your Information (Optional)</legend>
+          
           <div className="form-group">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="contributor_name">Your name</label>
             <input
               type="text"
-              id="title"
-              name="title"
-              value={formData.title}
+              id="contributor_name"
+              name="contributor_name"
+              value={formData.contributor_name}
               onChange={handleChange}
-              placeholder="e.g., Letter from Emma Gene to her mother"
-              required
+              placeholder="Your name"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Brief Description</label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows={4}
-              placeholder="Provide context about this item..."
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="content_text">Content/Transcription (if applicable)</label>
-            <textarea
-              id="content_text"
-              name="content_text"
-              value={formData.content_text}
-              onChange={handleChange}
-              rows={8}
-              placeholder="Type or paste the full text here..."
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="content_date">Date (when was this created?)</label>
+            <label htmlFor="contributor_email">Your email</label>
             <input
-              type="date"
-              id="content_date"
-              name="content_date"
-              value={formData.content_date}
+              type="email"
+              id="contributor_email"
+              name="contributor_email"
+              value={formData.contributor_email}
               onChange={handleChange}
+              placeholder="your.email@example.com"
             />
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="date_is_approximate"
-                checked={formData.date_is_approximate}
-                onChange={handleChange}
-              />
-              This date is approximate
-            </label>
           </div>
 
           <div className="form-group">
-            <label htmlFor="file">Upload File (optional)</label>
+            <label htmlFor="contributor_phone">Your phone number</label>
             <input
-              type="file"
-              id="file"
-              onChange={handleFileChange}
-              accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt"
+              type="tel"
+              id="contributor_phone"
+              name="contributor_phone"
+              value={formData.contributor_phone}
+              onChange={handleChange}
+              placeholder="(555) 123-4567"
             />
-            <small>Supported: Images, PDFs, Audio files, Word documents</small>
           </div>
+        </fieldset>
 
-          <fieldset>
-            <legend>Your Information (Optional)</legend>
-            
-            <div className="form-group">
-              <label htmlFor="contributor_name">Your name</label>
-              <input
-                type="text"
-                id="contributor_name"
-                name="contributor_name"
-                value={formData.contributor_name}
-                onChange={handleChange}
-                placeholder="Your name"
-              />
-            </div>
+        <button type="submit" disabled={uploading} className="submit-button">
+          {uploading ? 'Uploading...' : 'Submit to Archive'}
+        </button>
 
-            <div className="form-group">
-              <label htmlFor="contributor_email">Your email</label>
-              <input
-                type="email"
-                id="contributor_email"
-                name="contributor_email"
-                value={formData.contributor_email}
-                onChange={handleChange}
-                placeholder="your.email@example.com"
-              />
-            </div>
+        {message && (
+          <div className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
+            {message}
+          </div>
+        )}
+      </form>
 
-            <div className="form-group">
-              <label htmlFor="contributor_phone">Your phone number</label>
-              <input
-                type="tel"
-                id="contributor_phone"
-                name="contributor_phone"
-                value={formData.contributor_phone}
-                onChange={handleChange}
-                placeholder="(555) 123-4567"
-              />
-            </div>
-          </fieldset>
-
-          <button type="submit" disabled={uploading} className="submit-button">
-            {uploading ? 'Uploading...' : 'Submit to Archive'}
-          </button>
-
-          {message && (
-            <div className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
-              {message}
-            </div>
-          )}
-        </form>
-
-        <div className="phone-cta">
-          <h3>Or Call Our Story Line</h3>
-          <p className="phone-number">📞 (618) 3-PORVOY</p>
-          <p>Call anytime to leave your story as a voice message</p>
-        </div>
-      </main>
-
-      <Footer />
-    </>
+      <div className="phone-cta">
+        <h3>Or Call Our Story Line</h3>
+        <p className="phone-number">📞 (618) 3-PORVOY</p>
+        <p>Call anytime to leave your story as a voice message</p>
+      </div>
+    </main>
   );
 }
