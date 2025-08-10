@@ -3,6 +3,8 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import Header from '@/app/components/Header';
+import Footer from '@/app/components/Footer';
 
 export default function WritePage() {
   const [formData, setFormData] = useState({
@@ -26,10 +28,20 @@ export default function WritePage() {
     setMessage('');
 
     try {
+      // Map form types to database enum values
+      const typeMapping: Record<string, string> = {
+        'anecdote': 'anecdote',
+        'diary': 'diary_entry',
+        'letter': 'letter',
+        'tribute': 'document',
+        'recipe': 'document',
+        'poem': 'document'
+      };
+
       const { error } = await supabase
         .from('content_items')
         .insert({
-          type: formData.type,
+          type: typeMapping[formData.type] || formData.type,
           title: formData.title,
           content_text: formData.content_text,
           content_date: formData.content_date || null,
@@ -37,6 +49,8 @@ export default function WritePage() {
           contributor_name: formData.contributor_name,
           contributor_email: formData.contributor_email,
           contributor_phone: formData.contributor_phone,
+          is_public: true,
+          is_sensitive: false,
           source: 'web_form',
           source_details: {
             location: formData.location,
@@ -65,6 +79,7 @@ export default function WritePage() {
       
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      console.error('Error submitting form:', error);
       setMessage('❌ Error: ' + errorMessage);
     } finally {
       setSubmitting(false);
@@ -73,6 +88,8 @@ export default function WritePage() {
 
   return (
     <>
+      <Header />
+
       <main className="write-container">
         <h1 style={{textAlign: 'center', marginBottom: '0.5rem'}}>Write a Memory</h1>
         <p style={{textAlign: 'center', marginBottom: '2rem', color: '#666'}}>Share your story with the family</p>
@@ -122,10 +139,11 @@ export default function WritePage() {
               value={formData.content_text}
               onChange={(e) => setFormData({...formData, content_text: e.target.value})}
               placeholder="Tell your story here... What happened? Who was there? How did it feel?"
-              rows={15}
+              rows={10}
               required
+              style={{ minHeight: '200px' }}
             />
-            <small>{formData.content_text.length} characters</small>
+            <small>Take your time. Every detail matters.</small>
           </div>
 
           <div className="form-row">
@@ -142,7 +160,7 @@ export default function WritePage() {
                   checked={formData.date_is_approximate}
                   onChange={(e) => setFormData({...formData, date_is_approximate: e.target.checked})}
                 />
-                Date is approximate
+                This date is approximate
               </label>
             </div>
 
@@ -152,13 +170,13 @@ export default function WritePage() {
                 type="text"
                 value={formData.location}
                 onChange={(e) => setFormData({...formData, location: e.target.value})}
-                placeholder="e.g., San José, Costa Rica"
+                placeholder="e.g., Tampico, Illinois"
               />
             </div>
           </div>
 
           <div className="form-group">
-            <label>Who is mentioned in this story? (separate names with commas)</label>
+            <label>Who was involved? (separate names with commas)</label>
             <input
               type="text"
               value={formData.people_mentioned}
@@ -189,16 +207,16 @@ export default function WritePage() {
                   placeholder="your@email.com"
                 />
               </div>
+            </div>
 
-              <div className="form-group">
-                <label>Your Phone</label>
-                <input
-                  type="tel"
-                  value={formData.contributor_phone}
-                  onChange={(e) => setFormData({...formData, contributor_phone: e.target.value})}
-                  placeholder="(555) 123-4567"
-                />
-              </div>
+            <div className="form-group">
+              <label>Your Phone</label>
+              <input
+                type="tel"
+                value={formData.contributor_phone}
+                onChange={(e) => setFormData({...formData, contributor_phone: e.target.value})}
+                placeholder="(555) 123-4567"
+              />
             </div>
           </div>
 
@@ -213,6 +231,8 @@ export default function WritePage() {
           </div>
         )}
       </main>
+
+      <Footer />
 
       <style jsx>{`
         .write-container {
