@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/Footer';
 
 type TimelineItem = {
   id: string;
@@ -53,8 +51,6 @@ export default function TimelinePage() {
 
   return (
     <>
-      <Header />
-
       <main className="timeline-container">
         <h1 style={{textAlign: 'center', marginBottom: '2rem'}}>Family Timeline</h1>
         
@@ -116,8 +112,6 @@ export default function TimelinePage() {
           </>
         )}
       </main>
-
-      <Footer />
 
       <style jsx>{`
         .timeline-container {
