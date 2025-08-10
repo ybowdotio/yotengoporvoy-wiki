@@ -2,8 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/Footer';
 
 export default function RecordPage() {
   const [isRecording, setIsRecording] = useState(false);
@@ -211,8 +209,6 @@ export default function RecordPage() {
 
   return (
     <>
-      <Header />
-
       <main style={{ maxWidth: '800px', margin: '3rem auto', padding: '0 1rem' }}>
         {/* Page Header */}
         <div className="page-header-card">
@@ -402,8 +398,6 @@ export default function RecordPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
 
       <style jsx>{`
         .page-header-card {
