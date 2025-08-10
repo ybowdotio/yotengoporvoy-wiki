@@ -4,8 +4,6 @@ import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/Footer';
 
 type ContentItem = {
   id: string;
@@ -194,14 +192,8 @@ function BrowseContent() {
 
 export default function BrowsePage() {
   return (
-    <>
-      <Header />
-      
-      <Suspense fallback={<div className="loading">Loading...</div>}>
-        <BrowseContent />
-      </Suspense>
-      
-      <Footer />
-    </>
+    <Suspense fallback={<div className="loading">Loading...</div>}>
+      <BrowseContent />
+    </Suspense>
   );
 }
